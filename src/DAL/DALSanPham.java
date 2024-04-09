@@ -1,0 +1,322 @@
+package DAL;
+
+import DTO.ChiTietSanPham;
+import DTO.DTOSanPham;
+import java.util.ArrayList;
+import java.sql.*;
+
+public class DALSanPham {
+    private Connection c;
+    private PreparedStatement p = null;
+    private Statement stm = null;
+    public ArrayList <DTOSanPham> spList = new ArrayList<>();
+    public ArrayList <ChiTietSanPham> ctspList = new ArrayList<>();
+
+    public boolean open(){
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String dbUrl = "jdbc:sqlserver://localhost:1433;DatabaseName=QLBDT;encrypt=false";
+            String username = "sa";
+            String password = "123456";
+            c = DriverManager.getConnection(dbUrl,username,password);
+            return true;
+        }catch(Exception ex){
+            System.out.println(ex);
+            return false;
+        }
+    }
+    
+    public void close(){
+        try{
+            if(c != null){
+                c.close();
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }
+    }
+    
+    public ArrayList<DTOSanPham > getallSPlist(){
+        if(open()){
+            try{
+                spList.clear();
+                String sql = "SELECT * FROM SAN_PHAM";
+                stm = c.createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                while(rs.next()){
+                    DTOSanPham sp = new DTOSanPham();
+                    sp.setMaSanPham(rs.getString("MA_SAN_PHAM"));
+                    sp.setTenSanPham(rs.getString("TEN"));
+                    sp.setSoLuong(rs.getInt("SO_LUONG"));
+                    sp.setGiaNhap(rs.getFloat("GIA_NHAP"));
+                    sp.setGiaBan(rs.getFloat("GIA_BAN"));
+                    sp.setImg(rs.getString("HINH_ANH"));
+                    sp.setMaNCC(rs.getString("MA_NHA_CUNG_CAP"));
+                    sp.setBaoHanh(rs.getInt("BAO_HANH"));
+                    spList.add(sp);
+                }
+                return spList;
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return null;
+    }
+    
+    public boolean hasSP(String MaSP){
+        boolean result = false;
+        if(open()){
+            try{
+                String sql = "SELECT * FROM SAN_PHAM WHERE MA_SAN_PHAM = " + MaSP;
+                stm = c.createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                result = rs.next();
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+    
+    public DTOSanPham timtheomasp(String MaSP){
+        try{
+            if(open()){
+                String sql = "SELECT * FROM SAN_PHAM WHERE MA_SAN_PHAM = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaSP);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    String ten = rs.getString("TEN");
+                    int SoLuong = rs.getInt("SO_LUONG");
+                    float gianhap = rs.getFloat("GIA_NHAP");
+                    float giaban = rs.getFloat("GIA_BAN");
+                    String nsx = rs.getString("MA_NHA_CUNG_CAP");
+                    String img = rs.getString("HINH_ANH");
+                    int baohanh = rs.getInt("BAO_HANH");
+                    DTOSanPham ad = new DTOSanPham(MaSP,ten,gianhap, giaban,SoLuong,img,nsx,baohanh);
+                    return ad;
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return null;
+    }
+    
+    public boolean themSP(DTOSanPham sp){
+        boolean result = false;
+        if(open()){
+            try{
+                String sql = "INSERT INTO SAN_PHAM VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, sp.getMaSanPham());
+                p.setString(2,sp.getTenSanPham());
+                p.setFloat(3, sp.getGiaNhap());
+                p.setFloat(4, sp.getGiaBan());
+                p.setInt(5, sp.getSoLuong());
+                p.setString(6, sp.getImg());
+                p.setString(7,sp.getMaNCC());
+                p.setInt(8, sp.getBaoHanh());
+                if(p.executeUpdate() >= 1){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+    
+    public boolean xoaSP(DTOSanPham sp){
+        boolean result = false;
+        if(open()){
+            try{
+                String sql = "DELETE FROM SAN_PHAM WHERE MA_SAN_PHAM = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, sp.getMaSanPham());
+                if(p.executeUpdate() >= 1){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+    
+    public boolean suaSP(DTOSanPham sp){
+        boolean result = false;
+        if(open()){
+            try{
+                String SQL = "UPDATE SAN_PHAM SET MA_SAN_PHAM = ?, TEN = ?, GIA_NHAP = ?, GIA_BAN = ?, SO_LUONG = ?, HINH_ANH = ?, MA_NHA_CUNG_CAP = ?, BAO_HANH = ? WHERE MA_SAN_PHAM = ? ";
+                p = c.prepareStatement(SQL);
+                p.setString(1, sp.getMaSanPham());
+                p.setString(2, sp.getTenSanPham());
+                p.setFloat(3, sp.getGiaNhap());
+                p.setFloat(4, sp.getGiaBan());
+                p.setInt(5, sp.getSoLuong());
+                p.setString(6, sp.getImg());
+                p.setString(7, sp.getMaNCC());
+                p.setInt(8, sp.getBaoHanh());
+                p.setString(9, sp.getMaSanPham());
+                p.executeUpdate();
+                if(p.executeUpdate() >= 1){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+        
+    public boolean themctsp(ChiTietSanPham sp){
+        boolean result = false;
+        if(open()){
+            try{
+                String sql = "INSERT INTO CHI_TIET_SAN_PHAM VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, sp.getMaSP());
+                p.setString(2, sp.getMauSac());
+                p.setString(3,sp.getIMEI());
+                p.setString(4, sp.getManHinh());
+                p.setString(5, sp.getRam());
+                p.setString(6, sp.getRom());
+                p.setString(7, sp.getPin());
+                p.setString(8, sp.getThietKe());
+                p.setString(9, sp.getCamera());
+                p.setFloat(10, sp.getKhoiLuong());
+                if(p.executeUpdate() >= 0){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+    
+    public ArrayList<ChiTietSanPham> getallctsplist(){
+        if(open()){
+            try{
+                
+                ctspList.clear();
+                String sql = "SELECT * FROM CHI_TIET_SAN_PHAM";
+                stm = c.createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                while(rs.next()){
+                    ChiTietSanPham ctsp = new ChiTietSanPham();
+                    ctsp.setMaSP(rs.getString("MA_SAN_PHAM"));
+                    ctsp.setMauSac(rs.getString("MAU"));
+                    ctsp.setIMEI(rs.getString("IMEI"));
+                    ctsp.setManHinh(rs.getString("MAN_HINH"));
+                    ctsp.setRam(rs.getString("RAM"));
+                    ctsp.setRom(rs.getString("ROM"));
+                    ctsp.setPin(rs.getString("PIN"));
+                    ctsp.setThietKe(rs.getString("THIET_KE"));
+                    ctsp.setCamera(rs.getString("CAMERA"));
+                    ctsp.setKhoiLuong(rs.getFloat("KHOI_LUONG"));
+                    ctspList.add(ctsp);
+                }
+                return ctspList;
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return null;
+    }
+
+    public boolean suaCTSP(ChiTietSanPham ctsp, String MaSP){
+        boolean result = false;
+        if(open()){
+            try{
+                String SQL = "UPDATE CHI_TIET_SAN_PHAM SET MA_SAN_PHAM = ?, MAU = ?, IMEI = ?, MAN_HINH = ?, RAM = ?, ROM = ?, PIN = ?, THIET_KE = ?, CAMERA = ?, KHOI_LUONG = ? WHERE MA_SAN_PHAM = ? ";
+                p = c.prepareStatement(SQL);
+                p.setString(1, ctsp.getMaSP());
+                p.setString(2, ctsp.getMauSac());
+                p.setString(3, ctsp.getIMEI());
+                p.setString(4, ctsp.getManHinh());
+                p.setString(5, ctsp.getRam());
+                p.setString(6, ctsp.getRom());
+                p.setString(7, ctsp.getPin());
+                p.setString(8, ctsp.getThietKe());
+                p.setString(9, ctsp.getCamera());
+                p.setFloat(10, ctsp.getKhoiLuong());
+                p.setString(11, MaSP);
+                if(p.executeUpdate() >= 1){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+    
+    public ChiTietSanPham timctsptheomasp(String MaSP){
+        if(open()){
+            try{
+                    String sql = "SELECT * FROM CHI_TIET_SAN_PHAM WHERE MA_SAN_PHAM = ?";
+                    p = c.prepareStatement(sql);
+                    p.setString(1, MaSP);
+                    ResultSet rs = p.executeQuery();
+                    if(rs.next()){
+                        String MauSac = rs.getString("MAU");
+                        String IMEI = rs.getString("IMEI");
+                        String ManHinh = rs.getString("MAN_HINH");
+                        String RAM = rs.getString("RAM");
+                        String ROM = rs.getString("ROM");
+                        String Pin = rs.getString("PIN");
+                        String ThietKe = rs.getString("THIET_KE");
+                        String Camera = rs.getString("CAMERA");
+                        Float KhoiLuong = rs.getFloat("KHOI_LUONG");
+                        ChiTietSanPham ctsp = new ChiTietSanPham(MaSP,MauSac,IMEI,ManHinh,RAM,ROM,Pin,ThietKe,Camera,KhoiLuong);
+                        return ctsp;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return null;
+    }
+    
+    public boolean xoaCTSP(String masp){
+        boolean result = false;
+        if(open()){
+            try{
+                String sql = "DELETE FROM CHI_TIET_SAN_PHAM WHERE MA_SAN_PHAM = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, masp);
+                if(p.executeUpdate() >= 1){
+                    result = true;
+                }
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return result;
+    }
+
+}
