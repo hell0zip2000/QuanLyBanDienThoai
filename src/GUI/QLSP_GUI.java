@@ -5,6 +5,10 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,6 +21,111 @@ public class QLSP_GUI extends javax.swing.JFrame {
      */
     public QLSP_GUI() {
         initComponents();
+        setLocationRelativeTo(null);
+        loadSach();
+        maTuDong();
+        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
+        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
+        ArrayList<String> danhSachMaNXB = BLLget.BLLLayDSMaNXB();
+        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
+        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
+        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
+        cbbMaNXB.setModel(new DefaultComboBoxModel<>(danhSachMaNXB.toArray(new String[0])));
+        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
+    }
+    
+    public GUI_Sach(String maSach,String maNXB, int soLuong, float gia) {
+        this.maSach = maSach;
+        this.soLuong = soLuong;
+        this.gia = gia;
+        initComponents();
+        setLocationRelativeTo(null);
+        loadSach();
+        maTuDong();
+        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
+        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
+        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
+        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
+        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
+        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
+        txtMaSach.setText(maSach);
+        cbbMaNXB.setSelectedItem(maNXB);
+        txtSoLuong.setText(String.valueOf(soLuong));
+        txtGiaSach.setText(String.valueOf(gia));
+    }
+    
+    public void loadSach(){
+        model = new DefaultTableModel();
+        model.addColumn("Mã Sách");
+        model.addColumn("Tên Sách ");
+        model.addColumn("Mô Tả");
+        model.addColumn("Giá Sách");
+        model.addColumn("Số lượng");
+        model.addColumn("Mã Thể Loại");
+        model.addColumn("Mã NXB");
+        model.addColumn("Năm NXB ");
+        model.addColumn("Mã Tác Giả");
+        model.addColumn("Vị Trí");
+        model.addColumn("IMG");
+        model.addColumn("Mã Đầu Sách");
+        tbSach.setModel(model);
+        ArrayList<DTO_Sach> arr = new ArrayList<DTO_Sach>();
+        arr = sachBLL.BLLgetDL();
+        for (int i = 0; i < arr.size(); i++){
+            DTO_Sach sach = arr.get(i);
+            String MaSach = sach.getMaSach();
+            String TenSach = sach.getTenSach();
+            String MoTa = sach.getMoTa();
+            int GiaSach = sach.getGiaSach();
+            int SoLuong = sach.getSoLuong();
+            String MaTL = sach.getMaTL();
+            String MaNXB = sach.getMaNXB();
+            LocalDate NamXB = sach.getNamXB();
+            String MaTG = sach.getMaTG();
+            String ViTri = sach.getViTri();
+            String IMG = sach.getImage();
+            String MaDX = sach.getMaDauSach();
+            Object[] row = {MaSach, TenSach, MoTa, GiaSach, SoLuong, MaTL, MaNXB, NamXB, MaTG, ViTri,
+            IMG, MaDX};
+            model.addRow(row);
+        }
+    }
+    public static String tangMaSach(ArrayList<String> danhSachMaSach) {
+        String maxMaSach = ""; 
+        for (String maSach : danhSachMaSach) {
+            if (maSach.compareTo(maxMaSach) > 0) {
+                maxMaSach = maSach;
+            }
+        }
+        if (maxMaSach == null || maxMaSach.isEmpty()) {
+            return "SACH001"; // Giả sử mã đầu tiên là "DG001"
+        }
+        // Tăng mã 
+        String prefix = maxMaSach.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSach.substring(4));
+        suffix++;
+        // Trả về mã mới
+        return prefix + String.format("%03d", suffix);
+    }
+    public void maTuDong(){
+        ArrayList<String> danhSachMaSach = BLLget.BLLLayDSMaSach();
+        String newMaSach = tangMaSach(danhSachMaSach);
+        txtMaSach.setText(newMaSach);
+    }
+    public void trangThaiBanDau(){
+        txtAnh.setText("");
+        txtTenSach.setText("");
+        txtMoTa.setText("");
+        txtGiaSach.setText("");
+        txtSoLuong.setText("");
+        cbbMaTL.setSelectedItem(null);
+        cbbMaNXB.setSelectedItem(null);
+        JDateNamXB.setDate(null);
+        cbbMaTG.setSelectedItem(null);
+        txtViTri.setText("");
+        cbbMaDS.setSelectedItem(null);
+        lblAnh.setIcon(null);
+        maTuDong();
     }
 
     /**
