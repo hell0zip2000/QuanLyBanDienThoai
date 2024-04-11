@@ -53,7 +53,7 @@ public class ChiTietHoaDon {
     }
 
     public float getThanhTien() {
-        return ThanhTien;
+        return Gia * soLuong;
     }
 
     public void setThanhTien(float ThanhTien) {

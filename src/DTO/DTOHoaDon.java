@@ -4,10 +4,11 @@ import java.sql.Date;
 
 public class DTOHoaDon {
 
-    private String maHoaDon, maNhanVien, maKhachHang, maKhuyenMai;
-    private Date thoiGianTao;
-    private int tongSoLuong;
-    private Double tongGia, thanhTien;
+    public String maHoaDon, maNhanVien, maKhachHang, maKhuyenMai;
+    public Date thoiGianTao;
+    public int tongSoLuong;
+    public Double tongGia, thanhTien;
+    public ChiTietHoaDon cthd;
 
     public DTOHoaDon() {
     }
