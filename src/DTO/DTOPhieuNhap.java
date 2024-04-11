@@ -7,17 +7,15 @@ public class DTOPhieuNhap{
     Date ngayNhap;
     public String mancc;
     public String manv;
-    public float tongGia;
     
     public DTOPhieuNhap() {
     }
 
-    public DTOPhieuNhap(String maPhieuNhap, Date ngayNhap, String mancc, String manv, float tongGia) {
+    public DTOPhieuNhap(String maPhieuNhap, Date ngayNhap, String mancc, String manv) {
         this.maPhieuNhap = maPhieuNhap;
         this.ngayNhap = ngayNhap;
         this.mancc = mancc;
         this.manv = manv;
-        this.tongGia = tongGia;
     }
 
     public String getMaPhieuNhap() {
@@ -50,14 +48,6 @@ public class DTOPhieuNhap{
 
     public void setMaNV(String manv) {
         this.manv = manv;
-    }
-    
-    public float getTongGia() {
-        return tongGia;
-    }
-
-    public void setTongGia(float tongGia) {
-        this.tongGia = tongGia;
     }
 }
  

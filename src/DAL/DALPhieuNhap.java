@@ -58,7 +58,6 @@ public class DALPhieuNhap {
                     pn.setNgayNhap(rs.getDate("NGAY_NHAP"));
                     pn.setMaNCC(rs.getString("MA_NHA_CUNG_CAP"));
                     pn.setMaNV(rs.getString("MA_NHAN_VIEN"));
-                    pn.setTongGia(rs.getFloat("TONG_GIA"));
                     pnList.add(pn);
                 }
             }catch(SQLException ex){
@@ -99,8 +98,7 @@ public class DALPhieuNhap {
                     Date ngaynhap = rs.getDate("NGAY_NHAP");
                     String mncc = rs.getString("MA_NHA_CUNG_CAP");
                     String mnv = rs.getString("MA_NHAN_VIEN");
-                    float gia = rs.getFloat("TONG_GIA");
-                    DTOPhieuNhap pn = new DTOPhieuNhap(MaPN,ngaynhap,mncc,mnv,gia);
+                    DTOPhieuNhap pn = new DTOPhieuNhap(MaPN,ngaynhap,mncc,mnv);
                     return pn;
                 }
             }
@@ -116,13 +114,12 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String sql = "INSERT INTO PHIEU_NHAP VALUES(?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO PHIEU_NHAP VALUES(?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1, pn.getMaPhieuNhap());
                 p.setDate(2, (Date) pn.getNgayNhap());
                 p.setString(3, pn.getMaNCC());
                 p.setString(4, pn.getMaNV());
-                p.setFloat(5, pn.getTongGia());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -158,13 +155,12 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE PHIEU_NHAP SET MA_PHIEU_NHAP = ?, NGAY_NHAP = ?, MA_NHA_CUNG_CAP = ?, MA_NHAN_VIEN = ?, TONG_GIA = ? WHERE MA_PHIEU_NHAP = ? ";
+                String SQL = "UPDATE PHIEU_NHAP SET MA_PHIEU_NHAP = ?, NGAY_NHAP = ?, MA_NHA_CUNG_CAP = ?, MA_NHAN_VIEN = ? WHERE MA_PHIEU_NHAP = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, pn.getMaPhieuNhap());
                 p.setDate(2, (Date)pn.getNgayNhap());
                 p.setString(3, pn.getMaNCC());
                 p.setString(4, pn.getMaNV());
-                p.setFloat(5, pn.getTongGia());
                 p.setString(6, pn.getMaPhieuNhap());
                 if(p.executeUpdate() >= 1){
                     result = true;
