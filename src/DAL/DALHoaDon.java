@@ -16,7 +16,7 @@ public class DALHoaDon {
     
     public boolean open(){
         try {
-            String server = "DESKTOP-DQND1DU\\DHAN";
+            String server = "DESKTOP-IHH7KJB\\HUY180903";
             String user = "sa";
             String pass = "123456";
             String db = "QLBDT";
