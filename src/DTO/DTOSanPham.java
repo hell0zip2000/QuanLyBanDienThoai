@@ -5,8 +5,8 @@ public class DTOSanPham{
     protected String maSanPham;
     protected String tenSanPham;
     protected int soLuong;
-    protected float giaNhap;
-    protected float giaBan;
+    protected int giaNhap;
+    protected int giaBan;
     protected String img;
     protected String maNCC;
     protected int baoHanh;
@@ -15,7 +15,7 @@ public class DTOSanPham{
         this.maSanPham = maSanPham;
     }
 
-    public DTOSanPham(String maSanPham, String tenSanPham, float giaNhap, float giaBan, int soLuong, String img, String maNCC, int baoHanh) {
+    public DTOSanPham(String maSanPham, String tenSanPham, int giaNhap, int giaBan, int soLuong, String img, String maNCC, int baoHanh) {
         this.maSanPham = maSanPham;
         this.tenSanPham = tenSanPham;
         this.giaNhap = giaNhap;
@@ -29,11 +29,11 @@ public class DTOSanPham{
     public DTOSanPham() {
     }
 
-    public void setGiaBan(float giaBan) {
+    public void setGiaBan(int giaBan) {
         this.giaBan = giaBan;
     }
 
-    public float getGiaBan() {
+    public int getGiaBan() {
         return giaBan;
     }
 
@@ -69,11 +69,11 @@ public class DTOSanPham{
         this.tenSanPham = tenSanPham;
     }
 
-    public float getGiaNhap() {
+    public int getGiaNhap() {
         return giaNhap;
     }
 
-    public void setGiaNhap(float giaNhap) {
+    public void setGiaNhap(int giaNhap) {
         this.giaNhap = giaNhap;
     }
 

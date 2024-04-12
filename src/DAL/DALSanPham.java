@@ -2,8 +2,10 @@ package DAL;
 
 import DTO.ChiTietSanPham;
 import DTO.DTOSanPham;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.sql.*;
+import java.text.DecimalFormat;
 
 public class DALSanPham {
     private Connection c;
@@ -48,11 +50,11 @@ public class DALSanPham {
                     sp.setMaSanPham(rs.getString("MA_SAN_PHAM"));
                     sp.setTenSanPham(rs.getString("TEN"));
                     sp.setSoLuong(rs.getInt("SO_LUONG"));
-                    sp.setGiaNhap(rs.getFloat("GIA_NHAP"));
-                    sp.setGiaBan(rs.getFloat("GIA_BAN"));
+                    sp.setBaoHanh(rs.getInt("BAO_HANH"));
+                    sp.setGiaNhap(rs.getInt("GIA_NHAP"));
+                    sp.setGiaBan(rs.getInt("GIA_BAN"));
                     sp.setImg(rs.getString("HINH_ANH"));
                     sp.setMaNCC(rs.getString("MA_NHA_CUNG_CAP"));
-                    sp.setBaoHanh(rs.getInt("BAO_HANH"));
                     spList.add(sp);
                 }
                 return spList;
@@ -92,12 +94,12 @@ public class DALSanPham {
                 if(rs.next()){
                     String ten = rs.getString("TEN");
                     int SoLuong = rs.getInt("SO_LUONG");
-                    float gianhap = rs.getFloat("GIA_NHAP");
-                    float giaban = rs.getFloat("GIA_BAN");
+                    int gianhap = rs.getInt("GIA_NHAP");
+                    int giaban = rs.getInt("GIA_BAN");
                     String nsx = rs.getString("MA_NHA_CUNG_CAP");
                     String img = rs.getString("HINH_ANH");
                     int baohanh = rs.getInt("BAO_HANH");
-                    DTOSanPham ad = new DTOSanPham(MaSP,ten,gianhap, giaban,SoLuong,img,nsx,baohanh);
+                    DTOSanPham ad = new DTOSanPham(MaSP,ten,gianhap,giaban,SoLuong,img,nsx,baohanh);
                     return ad;
                 }
             }
@@ -117,12 +119,12 @@ public class DALSanPham {
                 p = c.prepareStatement(sql);
                 p.setString(1, sp.getMaSanPham());
                 p.setString(2,sp.getTenSanPham());
-                p.setFloat(3, sp.getGiaNhap());
-                p.setFloat(4, sp.getGiaBan());
-                p.setInt(5, sp.getSoLuong());
-                p.setString(6, sp.getImg());
-                p.setString(7,sp.getMaNCC());
-                p.setInt(8, sp.getBaoHanh());
+                p.setInt(3, sp.getSoLuong());
+                p.setString(4, sp.getImg());
+                p.setInt(5, sp.getGiaNhap());
+                p.setInt(6, sp.getGiaBan());
+                p.setInt(7, sp.getBaoHanh());
+                p.setString(8,sp.getMaNCC());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -135,13 +137,13 @@ public class DALSanPham {
         return result;
     }
     
-    public boolean xoaSP(DTOSanPham sp){
+    public boolean xoaSP(String ma){
         boolean result = false;
         if(open()){
             try{
                 String sql = "DELETE FROM SAN_PHAM WHERE MA_SAN_PHAM = ?";
                 p = c.prepareStatement(sql);
-                p.setString(1, sp.getMaSanPham());
+                p.setString(1, ma);
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -162,8 +164,8 @@ public class DALSanPham {
                 p = c.prepareStatement(SQL);
                 p.setString(1, sp.getMaSanPham());
                 p.setString(2, sp.getTenSanPham());
-                p.setFloat(3, sp.getGiaNhap());
-                p.setFloat(4, sp.getGiaBan());
+                p.setInt(3, sp.getGiaNhap());
+                p.setInt(4, sp.getGiaBan());
                 p.setInt(5, sp.getSoLuong());
                 p.setString(6, sp.getImg());
                 p.setString(7, sp.getMaNCC());

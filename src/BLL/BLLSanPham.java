@@ -21,7 +21,7 @@ public class BLLSanPham {
         return DALSP.getallSPlist();
     }
     
-    public String BLLthemAndriod(DTOSanPham sp){
+    public String BLLthem(DTOSanPham sp){
         if(DALSP.hasSP(sp.getMaSanPham())){
             return "Mã sản phẩm đã tồn tài!";
         }
@@ -31,14 +31,14 @@ public class BLLSanPham {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTOSanPham sp){
+    public String BLLxoa(String sp){
         if(DALSP.xoaSP(sp)){
             return "Xóa thành công!";
         }
         return "Xóa thất bại!";
     }
     
-    public String BLLsuaANDROID(DTOSanPham sp){
+    public String BLLsua(DTOSanPham sp){
         if(DALSP.suaSP(sp)){
             return "Sửa thành công!";
         }
