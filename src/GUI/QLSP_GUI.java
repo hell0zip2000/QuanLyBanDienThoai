@@ -4,10 +4,17 @@
  */
 package GUI;
 
+import BLL.BLLSanPham;
+import DTO.DTOSanPham;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,116 +22,119 @@ import javax.swing.table.DefaultTableModel;
  * @author ADMIN
  */
 public class QLSP_GUI extends javax.swing.JFrame {
-
+    String maSP,maNCC;
+    int soLuong;
+    float gia;
+    DefaultTableModel model;
+    BLLSanPham BLLsp = new BLLSanPham();
+    String duongdananh = "";
+    public String anhlocal = "C:\\Users\\HP\\Desktop\\QuanLyBanDienThoai\\src\\IMG\\Sản phẩm";
     /**
      * Creates new form QLSP_GUI
      */
     public QLSP_GUI() {
         initComponents();
         setLocationRelativeTo(null);
-        loadSach();
+        loadSP();
         maTuDong();
-        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
-        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
-        ArrayList<String> danhSachMaNXB = BLLget.BLLLayDSMaNXB();
-        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
-        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
-        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
-        cbbMaNXB.setModel(new DefaultComboBoxModel<>(danhSachMaNXB.toArray(new String[0])));
-        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
+//        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
+//        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
+//        ArrayList<String> danhSachMaNXB = BLLget.BLLLayDSMaNXB();
+//        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
+//        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
+//        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
+//        cbbMaNXB.setModel(new DefaultComboBoxModel<>(danhSachMaNXB.toArray(new String[0])));
+//        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
     }
     
-    public GUI_Sach(String maSach,String maNXB, int soLuong, float gia) {
-        this.maSach = maSach;
-        this.soLuong = soLuong;
-        this.gia = gia;
-        initComponents();
-        setLocationRelativeTo(null);
-        loadSach();
-        maTuDong();
-        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
-        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
-        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
-        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
-        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
-        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
-        txtMaSach.setText(maSach);
-        cbbMaNXB.setSelectedItem(maNXB);
-        txtSoLuong.setText(String.valueOf(soLuong));
-        txtGiaSach.setText(String.valueOf(gia));
-    }
+//    public GUI_Sach(String maSach,String maNXB, int soLuong, float gia) {
+//        this.maSach = maSach;
+//        this.soLuong = soLuong;
+//        this.gia = gia;
+//        initComponents();
+//        setLocationRelativeTo(null);
+//        loadSach();
+//        maTuDong();
+//        ArrayList<String> danhSachDauSach = BLLget.BLLLayDSDS();
+//        ArrayList<String> danhSachMaTG = BLLget.BLLLayDSMaTG();
+//        ArrayList<String> danhSachMaTL = BLLget.BLLLayDSMaTL();
+//        cbbMaDS.setModel(new DefaultComboBoxModel<>(danhSachDauSach.toArray(new String[0])));
+//        cbbMaTG.setModel(new DefaultComboBoxModel<>(danhSachMaTG.toArray(new String[0])));
+//        cbbMaTL.setModel(new DefaultComboBoxModel<>(danhSachMaTL.toArray(new String[0])));
+//        txtMaSach.setText(maSach);
+//        cbbMaNXB.setSelectedItem(maNXB);
+//        txtSoLuong.setText(String.valueOf(soLuong));
+//        txtGiaSach.setText(String.valueOf(gia));
+//    }
     
-    public void loadSach(){
+    public void loadSP(){
         model = new DefaultTableModel();
-        model.addColumn("Mã Sách");
-        model.addColumn("Tên Sách ");
-        model.addColumn("Mô Tả");
-        model.addColumn("Giá Sách");
+        model.addColumn("Mã Sản Phẩm");
+        model.addColumn("Tên Sản Phẩm");
+        model.addColumn("Giá Nhập");
+        model.addColumn("Giá Bán");
         model.addColumn("Số lượng");
-        model.addColumn("Mã Thể Loại");
-        model.addColumn("Mã NXB");
-        model.addColumn("Năm NXB ");
-        model.addColumn("Mã Tác Giả");
-        model.addColumn("Vị Trí");
-        model.addColumn("IMG");
-        model.addColumn("Mã Đầu Sách");
-        tbSach.setModel(model);
-        ArrayList<DTO_Sach> arr = new ArrayList<DTO_Sach>();
-        arr = sachBLL.BLLgetDL();
+        model.addColumn("Mã Nhà Cung Cấp");
+        model.addColumn("Bảo Hành");
+        model.addColumn("Anh");
+        tbSanPham.setModel(model);
+        ArrayList<DTOSanPham> arr = new ArrayList<DTOSanPham>();
+        arr = BLLsp.BLLgetDL();
         for (int i = 0; i < arr.size(); i++){
-            DTO_Sach sach = arr.get(i);
-            String MaSach = sach.getMaSach();
-            String TenSach = sach.getTenSach();
-            String MoTa = sach.getMoTa();
-            int GiaSach = sach.getGiaSach();
-            int SoLuong = sach.getSoLuong();
-            String MaTL = sach.getMaTL();
-            String MaNXB = sach.getMaNXB();
-            LocalDate NamXB = sach.getNamXB();
-            String MaTG = sach.getMaTG();
-            String ViTri = sach.getViTri();
-            String IMG = sach.getImage();
-            String MaDX = sach.getMaDauSach();
-            Object[] row = {MaSach, TenSach, MoTa, GiaSach, SoLuong, MaTL, MaNXB, NamXB, MaTG, ViTri,
-            IMG, MaDX};
+            DTOSanPham sp = arr.get(i);
+            String MaSP = sp.getMaSanPham();
+            String TenSP = sp.getTenSanPham();
+            float GiaNhap = sp.getGiaNhap();
+            float GiaBan = sp.getGiaBan();
+            int SoLuong = sp.getSoLuong();
+            String MaNCC = sp.getMaNCC();
+            int BH = sp.getBaoHanh();
+            String anh = sp.getImg();
+            Object[] row = {MaSP, TenSP, GiaNhap, GiaBan, SoLuong, MaNCC, BH, anh};
             model.addRow(row);
         }
     }
-    public static String tangMaSach(ArrayList<String> danhSachMaSach) {
-        String maxMaSach = ""; 
-        for (String maSach : danhSachMaSach) {
-            if (maSach.compareTo(maxMaSach) > 0) {
-                maxMaSach = maSach;
+    
+    public static String tangMaSP(ArrayList<String> danhSachMaSP) {
+        String maxMaSP = ""; 
+        for (String maSP : danhSachMaSP) {
+            if (maSP.compareTo(maxMaSP) > 0) {
+                maxMaSP = maSP;
             }
         }
-        if (maxMaSach == null || maxMaSach.isEmpty()) {
-            return "SACH001"; // Giả sử mã đầu tiên là "DG001"
+        if (maxMaSP == null || maxMaSP.isEmpty()) {
+            return "SP001"; // Giả sử mã đầu tiên là "SP001"
         }
         // Tăng mã 
-        String prefix = maxMaSach.substring(0, 4); // Giả sử mã có dạng "TGxxx"
-        int suffix = Integer.parseInt(maxMaSach.substring(4));
+        String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSP.substring(4));
         suffix++;
         // Trả về mã mới
-        return prefix + String.format("%03d", suffix);
+        return prefix + String.format("%d", suffix);
     }
+    
+    public ArrayList<String> laydsma(){
+        ArrayList<String> dsma = new ArrayList<String>();
+        for(DTOSanPham sp : BLLsp.BLLgetDL()){
+            dsma.add(sp.getMaSanPham());
+        }
+        return dsma;
+    }
+    
     public void maTuDong(){
-        ArrayList<String> danhSachMaSach = BLLget.BLLLayDSMaSach();
-        String newMaSach = tangMaSach(danhSachMaSach);
-        txtMaSach.setText(newMaSach);
+        String newMaSP = tangMaSP(laydsma());
+        txtMaSP.setText(newMaSP);
     }
+    
     public void trangThaiBanDau(){
         txtAnh.setText("");
-        txtTenSach.setText("");
-        txtMoTa.setText("");
-        txtGiaSach.setText("");
+        txtTenSP.setText("");
+        txtGiaNhap.setText("");
+        txtGiaBan.setText("");
         txtSoLuong.setText("");
-        cbbMaTL.setSelectedItem(null);
-        cbbMaNXB.setSelectedItem(null);
-        JDateNamXB.setDate(null);
-        cbbMaTG.setSelectedItem(null);
-        txtViTri.setText("");
-        cbbMaDS.setSelectedItem(null);
-        lblAnh.setIcon(null);
+        cbbMaNCC.setSelectedItem(null);
+        txtBaoHanh.setText("");
+        jlbAnh.setIcon(null);
         maTuDong();
     }
 
@@ -161,7 +171,7 @@ public class QLSP_GUI extends javax.swing.JFrame {
         txtAnh = new javax.swing.JTextField();
         btnAnh = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tbSanPham = new javax.swing.JTable();
         jpCTSP = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         txtTenSP2 = new javax.swing.JTextField();
@@ -205,6 +215,8 @@ public class QLSP_GUI extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Số lượng");
+
+        txtMaSP.setEditable(false);
 
         jlbAnh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/iphone-15-pro-max-natural-titanium-pure-back-iphone-15-pro-max-natural-titanium-pure-front-2up-scree.jpg"))); // NOI18N
 
@@ -252,8 +264,13 @@ public class QLSP_GUI extends javax.swing.JFrame {
         btnAnh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAnh.setForeground(new java.awt.Color(0, 102, 102));
         btnAnh.setText("Thêm hình");
+        btnAnh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnhActionPerformed(evt);
+            }
+        });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -264,7 +281,7 @@ public class QLSP_GUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tbSanPham);
 
         javax.swing.GroupLayout jpQLSPLayout = new javax.swing.GroupLayout(jpQLSP);
         jpQLSP.setLayout(jpQLSPLayout);
@@ -275,6 +292,23 @@ public class QLSP_GUI extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpQLSPLayout.createSequentialGroup()
+                        .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpQLSPLayout.createSequentialGroup()
+                                .addGap(82, 82, 82)
+                                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(79, 79, 79)
+                                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)
+                                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(177, 177, 177))
+                            .addGroup(jpQLSPLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbbMaNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(391, 391, 391))))
+                    .addGroup(jpQLSPLayout.createSequentialGroup()
                         .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
@@ -284,47 +318,26 @@ public class QLSP_GUI extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpQLSPLayout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(txtBaoHanh))
-                            .addGroup(jpQLSPLayout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSoLuong, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtGiaBan)
-                                    .addComponent(txtTenSP)
+                                .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtSoLuong)
                                     .addComponent(txtGiaNhap)
-                                    .addComponent(txtMaSP)))))
-                    .addGroup(jpQLSPLayout.createSequentialGroup()
-                        .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtMaSP, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                                    .addComponent(txtGiaBan)
+                                    .addComponent(txtTenSP)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpQLSPLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(txtBaoHanh, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(61, 61, 61)
                         .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpQLSPLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbbMaNCC, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jpQLSPLayout.createSequentialGroup()
-                                .addGap(82, 82, 82)
-                                .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(79, 79, 79)
-                                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpQLSPLayout.createSequentialGroup()
-                        .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlbAnh)
-                            .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpQLSPLayout.createSequentialGroup()
-                        .addComponent(txtAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                            .addComponent(jlbAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jpQLSPLayout.setVerticalGroup(
             jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpQLSPLayout.createSequentialGroup()
-                .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpQLSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpQLSPLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
@@ -359,7 +372,7 @@ public class QLSP_GUI extends javax.swing.JFrame {
                             .addGroup(jpQLSPLayout.createSequentialGroup()
                                 .addComponent(btnAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jlbAnh)
+                                .addComponent(jlbAnh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(8, 8, 8)
@@ -600,6 +613,34 @@ public class QLSP_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTrongLuongActionPerformed
 
+    public ImageIcon ResizeImage(String ImagePath){
+        ImageIcon myImage = new ImageIcon(ImagePath);
+        Image img = myImage.getImage();
+        Image newImg = img.getScaledInstance(jlbAnh.getWidth(), jlbAnh.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        return image;
+    }
+    
+    private void btnAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnhActionPerformed
+        try{
+            JFileChooser f = new JFileChooser(anhlocal);
+            f.setDialogTitle("Mở file");
+            f.showOpenDialog(null);
+            File ftenanh = f.getSelectedFile();
+            duongdananh = ftenanh.getAbsolutePath();
+            if(duongdananh != null){
+                jlbAnh.setIcon(ResizeImage(String.valueOf(duongdananh)));
+                txtAnh.setText(duongdananh);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Chưa chọn ảnh");
+            } 
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "Chưa chọn ảnh");
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAnhActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -664,10 +705,10 @@ public class QLSP_GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel jlbAnh;
     private javax.swing.JPanel jpCTSP;
     private javax.swing.JPanel jpQLSP;
+    private javax.swing.JTable tbSanPham;
     private javax.swing.JTextField txtAnh;
     private javax.swing.JTextField txtBaoHanh;
     private javax.swing.JTextField txtCamera;
