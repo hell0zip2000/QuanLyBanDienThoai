@@ -26,6 +26,32 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         jpShow.repaint();
         jpShow.validate();
     }
+    
+    public Admin_GUI1(String maquyen) {
+        initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        QLSP_GUI qlsp = new QLSP_GUI();
+        qlsp.setVisible(false);
+        jpShow.removeAll();
+        jpShow.setLayout(new BorderLayout());
+        jpShow.add(qlsp.getContentPane());
+        jpShow.repaint();
+        jpShow.validate();
+        kiemtraquyen(maquyen);
+    }
+    
+    public void kiemtraquyen(String maquyen){
+        if(maquyen.equals("QK001")){ // Quyền bị hạn chế của nhân viên
+            btnQLSP.setEnabled(false);
+            btnQLKH.setEnabled(false);
+            btnQLNV.setEnabled(false);
+            btnQLHD.setEnabled(false);
+            btnNCC.setEnabled(false);
+            btnQLTK.setEnabled(false);
+            btnKM.setEnabled(false);
+        }
+        else{} // admin
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,7 +71,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         btnQLHD = new javax.swing.JButton();
         btnNCC = new javax.swing.JButton();
         btnQLPN = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnQLTK = new javax.swing.JButton();
         btnKM = new javax.swing.JButton();
         btnTrangChu = new javax.swing.JButton();
         jpTop = new javax.swing.JPanel();
@@ -111,10 +137,10 @@ public class Admin_GUI1 extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("QUẢN LÝ TÀI KHOẢN");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnQLTK.setText("QUẢN LÝ TÀI KHOẢN");
+        btnQLTK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnQLTKActionPerformed(evt);
             }
         });
 
@@ -146,7 +172,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
                     .addComponent(btnQLHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQLPN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnQLTK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnKM, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                 .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jpMenuLayout.createSequentialGroup()
@@ -172,7 +198,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnQLPN, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnQLTK, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnKM, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -384,7 +410,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         getContentPane().validate();
     }//GEN-LAST:event_btnTrangChuActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnQLTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLTKActionPerformed
         // TODO add your handling code here:
         QLTK_GUI tk = new QLTK_GUI();
         tk.setVisible(false);
@@ -393,7 +419,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         jpShow.add(tk.getContentPane());
         jpShow.repaint();
         jpShow.validate();
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnQLTKActionPerformed
 
     private void btnNCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNCCActionPerformed
         // TODO add your handling code here:
@@ -450,9 +476,9 @@ public class Admin_GUI1 extends javax.swing.JFrame {
     private javax.swing.JButton btnQLNV;
     private javax.swing.JButton btnQLPN;
     private javax.swing.JButton btnQLSP;
+    private javax.swing.JButton btnQLTK;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel17;

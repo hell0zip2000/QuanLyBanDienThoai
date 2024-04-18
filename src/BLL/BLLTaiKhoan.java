@@ -56,7 +56,7 @@ public class BLLTaiKhoan {
     }
 
     public boolean DangNhap(String TaiKhoan, String MatKhau){
-        if(DALTK.hasTKMK(TaiKhoan, MatKhau) == true){
+        if(DALTK.dangnhap(TaiKhoan, MatKhau) == true){
             return true;
         }
         return false;
