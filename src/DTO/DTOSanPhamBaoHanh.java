@@ -3,19 +3,17 @@ package DTO;
 import java.sql.Date;
 
 public class DTOSanPhamBaoHanh {
-    private String maSPBH, tenSP;
-    private boolean trangThai;
-    private Date ngayNhan, ngayTra;
+    private String maSPBH, tenSP, maBH;
+    private float gia;
 
     public DTOSanPhamBaoHanh(){}
 
-    public DTOSanPhamBaoHanh(String maSPBH, String tenSP, boolean trangThai, Date ngayNhan, Date ngayTra)
+    public DTOSanPhamBaoHanh(String maSPBH, String tenSP, float gia, String maBH)
     {
         this.maSPBH = maSPBH;
         this.tenSP = tenSP;
-        this.trangThai = trangThai;
-        this.ngayNhan = ngayNhan;
-        this.ngayTra = ngayTra;
+        this.gia = gia;
+        this.maBH = maBH;
     }
 
     public void setMaSPBH(String maSPBH) {
@@ -26,22 +24,6 @@ public class DTOSanPhamBaoHanh {
         return maSPBH;
     }
 
-    public void setNgayNhan(Date ngayNhan) {
-        this.ngayNhan = ngayNhan;
-    }
-
-    public Date getNgayNhan() {
-        return ngayNhan;
-    }
-
-    public void setNgayTra(Date ngayTra) {
-        this.ngayTra = ngayTra;
-    }
-
-    public Date getNgayTra() {
-        return ngayTra;
-    }
-
     public void setTenSP(String tenSP) {
         this.tenSP = tenSP;
     }
@@ -49,12 +31,20 @@ public class DTOSanPhamBaoHanh {
     public String getTenSP() {
         return tenSP;
     }
-
-    public void setTrangThai(boolean trangThai) {
-        this.trangThai = trangThai;
+    
+    public void setMaBH(String maBH) {
+        this.maBH = maBH;
     }
 
-    public boolean getTrangThai(){
-        return trangThai;
+    public String getMaBH() {
+        return maBH;
+    }
+    
+    public void setGia(float gia) {
+        this.gia = gia;
+    }
+
+    public Float getGia() {
+        return gia;
     }
 }

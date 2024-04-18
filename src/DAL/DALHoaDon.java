@@ -210,8 +210,8 @@ public boolean xoaHD(DTOHoaDon hd){
             try{
                 String sql = "INSERT INTO CHI_TIET_HOA_DON VALUE(?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
-                p.setString(1, hd.getMaHD());
-                p.setString(2, hd.getMaSP());
+                p.setString(2, hd.getMaHD());
+                p.setString(1, hd.getMaSP());
                 p.setInt(3, hd.getSoLuong());
                 p.setFloat(4,hd.getGia());
                 p.setFloat(5, hd.getThanhTien());

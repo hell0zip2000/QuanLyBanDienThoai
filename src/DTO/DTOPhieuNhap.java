@@ -5,16 +5,14 @@ import java.util.Date;
 public class DTOPhieuNhap{
     String maPhieuNhap;
     Date ngayNhap;
-    public String mancc;
     public String manv;
     
     public DTOPhieuNhap() {
     }
 
-    public DTOPhieuNhap(String maPhieuNhap, Date ngayNhap, String mancc, String manv) {
+    public DTOPhieuNhap(String maPhieuNhap, Date ngayNhap, String manv) {
         this.maPhieuNhap = maPhieuNhap;
         this.ngayNhap = ngayNhap;
-        this.mancc = mancc;
         this.manv = manv;
     }
 
@@ -32,14 +30,6 @@ public class DTOPhieuNhap{
 
     public void setNgayNhap(Date ngayNhap) {
         this.ngayNhap = ngayNhap;
-    }
-
-    public String getMaNCC() {
-        return mancc;
-    }
-
-    public void setMaNCC(String mancc) {
-        this.mancc = mancc;
     }
 
     public String getMaNV() {

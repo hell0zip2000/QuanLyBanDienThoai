@@ -47,6 +47,7 @@ public class DALPhieuBaoHanh {
                     pbh.setNgayLap(rs.getDate("NGAY_LAP"));
                     pbh.setNoiDung(rs.getString("NOI_DUNG"));
                     pbh.setChiPhi(rs.getFloat("CHI_PHI"));
+                    pbh.setMaBaoHanh(rs.getString("MA_HOA_DON"));
                     pbhList.add(pbh);
                 }
             }catch(SQLException ex){
@@ -87,7 +88,8 @@ public class DALPhieuBaoHanh {
                     Date ngayLap = rs.getDate("NGAY_LAP");
                     String NoiDung = rs.getString("NOI_DUNG");
                     float Gia = rs.getFloat("CHI_PHI");
-                    DTOPhieuBaoHanh pbh = new DTOPhieuBaoHanh(MaBaoHanh,NoiDung,ngayLap,Gia);
+                    String HoaDon = rs.getString("MA_HOA_DON");
+                    DTOPhieuBaoHanh pbh = new DTOPhieuBaoHanh(MaBaoHanh,NoiDung,ngayLap,Gia,HoaDon);
                     return pbh;
                 }
             }
@@ -103,12 +105,13 @@ public class DALPhieuBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String sql = "INSERT INTO PHIEU_BAO_HANH VALUES(?, ?, ?, ?)";
+                String sql = "INSERT INTO PHIEU_BAO_HANH VALUES(?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1,pbh.getMaBaoHanh());
-                p.setDate(2, pbh.getNgayLap());
-                p.setString(3, pbh.getNoiDung());
-                p.setFloat(4, pbh.getChiPhi());
+                p.setDate(3, pbh.getNgayLap());
+                p.setString(4, pbh.getNoiDung());
+                p.setFloat(2, pbh.getChiPhi());
+                p.setString(5,pbh.getMaHoaDon());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -145,13 +148,14 @@ public class DALPhieuBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE PHIEU_BAO_HANH SET  MA_BAO_HANH = ?, NGAY_LAP = ?, NOI_DUNG = ?, CHI_PHI = ? WHERE MA_BAO_HANH = ? ";
+                String SQL = "UPDATE PHIEU_BAO_HANH SET  MA_BAO_HANH = ?, NGAY_LAP = ?, NOI_DUNG = ?, CHI_PHI = ?, MA_HOA_DON = ? WHERE MA_BAO_HANH = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, pbh.getMaBaoHanh());
                 p.setDate(2, pbh.getNgayLap());
                 p.setString(3, pbh.getNoiDung());
                 p.setFloat(4, pbh.getChiPhi());
-                p.setString(5, pbh.getMaBaoHanh());
+                p.setString(5, pbh.getMaHoaDon());
+                p.setString(6, pbh.getMaBaoHanh());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }

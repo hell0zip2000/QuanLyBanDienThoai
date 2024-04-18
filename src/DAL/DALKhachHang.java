@@ -110,11 +110,11 @@ public class DALKhachHang {
                 String sql = "INSERT INTO KHACH_HANG VALUES(?, ?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1, kh.getMaKH());
-                p.setString(2, kh.getTen());
+                p.setString(6, kh.getTen());
                 p.setString(3, kh.getDiaChi());
-                p.setString(4, kh.getSDT());
+                p.setString(2, kh.getSDT());
                 p.setString(5, kh.getSex());
-                p.setDate(6, kh.getNgaySinh());
+                p.setDate(4, kh.getNgaySinh());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }

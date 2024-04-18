@@ -56,7 +56,6 @@ public class DALPhieuNhap {
                     DTOPhieuNhap pn = new DTOPhieuNhap();
                     pn.setMaPhieuNhap(rs.getString("MA_PHIEU_NHAP"));
                     pn.setNgayNhap(rs.getDate("NGAY_NHAP"));
-                    pn.setMaNCC(rs.getString("MA_NHA_CUNG_CAP"));
                     pn.setMaNV(rs.getString("MA_NHAN_VIEN"));
                     pnList.add(pn);
                 }
@@ -96,9 +95,8 @@ public class DALPhieuNhap {
                 ResultSet rs = p.executeQuery();
                 if(rs.next()){
                     Date ngaynhap = rs.getDate("NGAY_NHAP");
-                    String mncc = rs.getString("MA_NHA_CUNG_CAP");
                     String mnv = rs.getString("MA_NHAN_VIEN");
-                    DTOPhieuNhap pn = new DTOPhieuNhap(MaPN,ngaynhap,mncc,mnv);
+                    DTOPhieuNhap pn = new DTOPhieuNhap(MaPN,ngaynhap,mnv);
                     return pn;
                 }
             }
@@ -118,8 +116,7 @@ public class DALPhieuNhap {
                 p = c.prepareStatement(sql);
                 p.setString(1, pn.getMaPhieuNhap());
                 p.setDate(2, (Date) pn.getNgayNhap());
-                p.setString(3, pn.getMaNCC());
-                p.setString(4, pn.getMaNV());
+                p.setString(3, pn.getMaNV());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -155,13 +152,12 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE PHIEU_NHAP SET MA_PHIEU_NHAP = ?, NGAY_NHAP = ?, MA_NHA_CUNG_CAP = ?, MA_NHAN_VIEN = ? WHERE MA_PHIEU_NHAP = ? ";
+                String SQL = "UPDATE PHIEU_NHAP SET MA_PHIEU_NHAP = ?, NGAY_NHAP = ?, MA_NHAN_VIEN = ? WHERE MA_PHIEU_NHAP = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, pn.getMaPhieuNhap());
                 p.setDate(2, (Date)pn.getNgayNhap());
-                p.setString(3, pn.getMaNCC());
-                p.setString(4, pn.getMaNV());
-                p.setString(6, pn.getMaPhieuNhap());
+                p.setString(3, pn.getMaNV());
+                p.setString(4, pn.getMaPhieuNhap());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }

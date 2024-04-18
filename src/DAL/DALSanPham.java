@@ -2,10 +2,8 @@ package DAL;
 
 import DTO.ChiTietSanPham;
 import DTO.DTOSanPham;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.sql.*;
-import java.text.DecimalFormat;
 
 public class DALSanPham {
     private Connection c;
@@ -71,9 +69,10 @@ public class DALSanPham {
         boolean result = false;
         if(open()){
             try{
-                String sql = "SELECT * FROM SAN_PHAM WHERE MA_SAN_PHAM = " + MaSP;
-                stm = c.createStatement();
-                ResultSet rs = stm.executeQuery(sql);
+                String sql = "SELECT * FROM SAN_PHAM WHERE MA_SAN_PHAM = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaSP);
+                ResultSet rs = p.executeQuery();
                 result = rs.next();
             }catch(SQLException ex){
                 System.out.println(ex);
@@ -191,15 +190,15 @@ public class DALSanPham {
                 String sql = "INSERT INTO CHI_TIET_SAN_PHAM VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1, sp.getMaSP());
-                p.setString(2, sp.getMauSac());
-                p.setString(3,sp.getIMEI());
-                p.setString(4, sp.getManHinh());
-                p.setString(5, sp.getRam());
-                p.setString(6, sp.getRom());
-                p.setString(7, sp.getPin());
-                p.setString(8, sp.getThietKe());
-                p.setString(9, sp.getCamera());
-                p.setFloat(10, sp.getKhoiLuong());
+                p.setString(5, sp.getMauSac());
+                p.setString(6,sp.getIMEI());
+                p.setString(7, sp.getManHinh());
+                p.setString(8, sp.getRam());
+                p.setString(9, sp.getRom());
+                p.setString(10, sp.getPin());
+                p.setString(2, sp.getThietKe());
+                p.setString(3, sp.getCamera());
+                p.setFloat(4, sp.getKhoiLuong());
                 if(p.executeUpdate() >= 0){
                     result = true;
                 }
@@ -321,4 +320,61 @@ public class DALSanPham {
         return result;
     }
 
+    public ArrayList<DTOSanPham> timtheoten(String ten){
+        try{
+            if(open()){
+                spList.clear();
+                String sql = "SELECT * FROM SAN_PHAM WHERE LOWER(TEN) LIKE LOWER(?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, "%" + ten + "%");
+                ResultSet rs = p.executeQuery();
+                while(rs.next()){
+                    String ma = rs.getString("MA_SAN_PHAM");
+                    String tensach = rs.getString("TEN");
+                    int soluong = rs.getInt("SO_LUONG");
+                    String img = rs.getString("HINH_ANH");
+                    int giaban = rs.getInt("GIA_BAN");
+                    int gianhap = rs.getInt("GIA_NHAP");
+                    int baohanh = rs.getInt("BAO_HANH");
+                    String mancc = rs.getString("MA_NHA_CUNG_CAP");
+                    DTOSanPham sp = new DTOSanPham(ma,tensach,gianhap,giaban,soluong,img,mancc,baohanh);
+                    spList.add(sp);
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return spList;
+    }
+    
+    public ArrayList<DTOSanPham> timtheomancc(String Ma){
+        try{
+            if(open()){
+                spList.clear();
+                String sql = "SELECT * FROM SAN_PHAM WHERE LOWER(MA_NHA_CUNG_CAP) LIKE LOWER(?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, "%" + Ma + "%");
+                ResultSet rs = p.executeQuery();
+                while(rs.next()){
+                    String ten = rs.getString("TEN");
+                    int SoLuong = rs.getInt("SO_LUONG");
+                    int gianhap = rs.getInt("GIA_NHAP");
+                    int giaban = rs.getInt("GIA_BAN");
+                    String masp = rs.getString("MA_SAN_PHAM");
+                    String img = rs.getString("HINH_ANH");
+                    int baohanh = rs.getInt("BAO_HANH");
+                    String mancc = rs.getString("MA_NHA_CUNG_CAP");
+                    DTOSanPham ad = new DTOSanPham(masp,ten,gianhap,giaban,SoLuong,img,mancc,baohanh);
+                    spList.add(ad);
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return spList;
+    }
 }

@@ -3,18 +3,19 @@ package DTO;
 import java.sql.Date;
 
 public class DTOPhieuBaoHanh {
-    private String maBaoHanh, noiDung;
+    private String maBaoHanh, noiDung, maHoaDon;
     private Date ngayLap;
     private float chiphi;
 
     public DTOPhieuBaoHanh(){}
 
-    public DTOPhieuBaoHanh(String maBaoHanh, String noiDung, Date ngayLap, float chiphi)
+    public DTOPhieuBaoHanh(String maBaoHanh, String noiDung, Date ngayLap, float chiphi, String maHoaDon)
     {
         this.maBaoHanh = maBaoHanh;
         this.noiDung = noiDung;
         this.ngayLap = ngayLap;
         this.chiphi = chiphi;
+        this.maHoaDon = maHoaDon;
     }
 
     public void setMaBaoHanh(String maBaoHanh) {
@@ -47,5 +48,13 @@ public class DTOPhieuBaoHanh {
 
     public String getNoiDung() {
         return noiDung;
+    }
+    
+    public void setMaHoaDon(String maHoaDon) {
+        this.maHoaDon = maHoaDon;
+    }
+
+    public String getMaHoaDon() {
+        return maHoaDon;
     }
 }

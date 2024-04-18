@@ -77,15 +77,15 @@ public class DALNhanVien{
         try{
         PreparedStatement stmt  = c.prepareStatement("insert into NHAN_VIEN values(?,?,?,?,?,?,?,?,?,?,?)");
         stmt.setString(1, nv.getMaNV());
-        stmt.setString(2, nv.getTen());
-        stmt.setString(3, nv.getSDT());
-        stmt.setString(4, nv.getDiaChi());
-        stmt.setString(5, nv.getSex());
-        stmt.setFloat(6, nv.getLuong());
-        stmt.setDate(7, nv.getNgaySinh());
-        stmt.setString(8, nv.getVitri());
-        stmt.setBoolean(9, nv.getTrangThai());
-        stmt.setString(10, nv.getHinhanh());
+        stmt.setString(3, nv.getTen());
+        stmt.setString(8, nv.getSDT());
+        stmt.setString(2, nv.getDiaChi());
+        stmt.setString(4, nv.getSex());
+        stmt.setFloat(9, nv.getLuong());
+        stmt.setDate(5, nv.getNgaySinh());
+        stmt.setString(7, nv.getVitri());
+        stmt.setBoolean(10, nv.getTrangThai());
+        stmt.setString(6, nv.getHinhanh());
         stmt.setString(11, nv.getMaCN());
         if (stmt.executeUpdate()>=1)
           result = true;

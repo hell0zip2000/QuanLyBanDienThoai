@@ -110,10 +110,10 @@ public class DALKhuyenMai {
                 String sql = "INSERT INTO KhuyenMai VALUES(?, ?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1,km.getMaKhuyenMai());
-                p.setDate(2, km.getNgayBD());
-                p.setDate(3, km.getNgayKT());
-                p.setBoolean(4, km.getLoai());
-                p.setString(5, km.getTen());
+                p.setDate(3, km.getNgayBD());
+                p.setDate(4, km.getNgayKT());
+                p.setBoolean(5, km.getLoai());
+                p.setString(2, km.getTen());
                 p.setFloat(6, km.getGiaTri());
                 if(p.executeUpdate() >= 1){
                     result = true;

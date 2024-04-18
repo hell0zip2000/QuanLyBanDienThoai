@@ -45,7 +45,7 @@ public class BLLSanPham {
         return "Sửa thất bại!";
     }
     
-    public DTOSanPham BLLtim(String sp){
+    public DTOSanPham BLLtimtheomasp(String sp){
         if(DALSP.hasSP(sp)){
             return DALSP.timtheomasp(sp);
         }
@@ -78,5 +78,13 @@ public class BLLSanPham {
             return DALSP.timctsptheomasp(mc);
         }
         return null;
+    }
+    
+    public ArrayList<DTOSanPham> BLLtimtheoten(String mc){
+        return DALSP.timtheoten(mc);
+    }
+        
+    public ArrayList<DTOSanPham> BLLtimtheomancc(String mc){
+        return DALSP.timtheomancc(mc);
     }
 }

@@ -45,9 +45,8 @@ public class DALSanPhamBaoHanh {
                     DTOSanPhamBaoHanh spbh = new DTOSanPhamBaoHanh();
                     spbh.setMaSPBH(rs.getString("MA_SAN_PHAM"));
                     spbh.setTenSP(rs.getString("TEN_SAN_PHAM"));
-                    spbh.setNgayNhan(rs.getDate("NGAY_NHAN"));
-                    spbh.setNgayTra(rs.getDate("NGAY_TRA"));
-                    spbh.setTrangThai(rs.getBoolean("TRANG_THAI"));
+                    spbh.setGia(rs.getFloat("GIA_BAN"));
+                    spbh.setMaBH(rs.getString("MA_BAO_HANH"));
                     spbhList.add(spbh);
                 }
             }catch(SQLException ex){
@@ -85,11 +84,10 @@ public class DALSanPhamBaoHanh {
                 p.setString(1, MaSPBH);
                 ResultSet rs = p.executeQuery();
                 if(rs.next()){
-                    Date ngayNhan = rs.getDate("NGAY_NHAN");
-                    Date ngayTra = rs.getDate("NGAY_TRA");
                     String TenSP = rs.getString("TEN_SAN_PHAM");
-                    Boolean TrangThai = rs.getBoolean("TRANG_THAI");
-                    DTOSanPhamBaoHanh spbh = new DTOSanPhamBaoHanh(MaSPBH,TenSP,TrangThai,ngayNhan,ngayTra);
+                    float gia = rs.getFloat("GIA_BAN");
+                    String MaBH = rs.getString("MA_BAO_HANH");
+                    DTOSanPhamBaoHanh spbh = new DTOSanPhamBaoHanh(MaSPBH,TenSP,gia,MaBH);
                     return spbh;
                 }
             }
@@ -105,13 +103,12 @@ public class DALSanPhamBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String sql = "INSERT INTO SAN_PHAM-BAO_HANH VALUES(?, ?, ? ?, ?)";
+                String sql = "INSERT INTO SAN_PHAM-BAO_HANH VALUES(?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1,spbh.getMaSPBH());
                 p.setString(2, spbh.getTenSP());
-                p.setDate(3, spbh.getNgayNhan());
-                p.setDate(4, spbh.getNgayTra());
-                p.setBoolean(5, spbh.getTrangThai());
+                p.setFloat(3, spbh.getGia());
+                p.setString(4,spbh.getMaBH());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -148,13 +145,12 @@ public class DALSanPhamBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE SAN_PHAM_BAO_HANH SET  MA_SAN_PHAM = ?, TEN_SAN_PHAM = ?, NGAY_NHAN = ?, NGAY_TRA = ?, TRANG_THAI = ? WHERE MA_SAN_PHAM = ? ";
+                String SQL = "UPDATE SAN_PHAM_BAO_HANH SET  MA_SAN_PHAM = ?, TEN_SAN_PHAM = ?, GIA = ?, MA_BAO_HANH = ? WHERE MA_SAN_PHAM = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, spbh.getMaSPBH());
                 p.setString(2, spbh.getTenSP());
-                p.setDate(3, spbh.getNgayNhan());
-                p.setDate(4, spbh.getNgayTra());
-                p.setBoolean(5, spbh.getTrangThai());
+                p.setFloat(3, spbh.getGia());
+                p.setString(4, spbh.getMaBH());
                 p.setString(6, spbh.getMaSPBH());
                 if(p.executeUpdate() >= 1){
                     result = true;
