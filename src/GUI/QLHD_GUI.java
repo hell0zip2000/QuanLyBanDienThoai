@@ -506,19 +506,19 @@ int current = 0;
 
     private void btnChiTietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChiTietActionPerformed
         // TODO add your handling code here:
-            jTabbedPane1.setSelectedIndex(1);
-     String maHD = txtMaHD.getText();
-     BLLHoaDon bllHoaDon = new BLLHoaDon();
-     ChiTietHoaDon rs = bllHoaDon.BLLtimcthd(maHD);
-     if (rs != null) {
-         model2.setRowCount(0);
-         j=1;
-         for (ChiTietHoaDon cthd : listCTHD) {
-             if(maHD.equals(cthd.getMaHD())){
-             model2.addRow(new Object[]{
-                 j++, cthd.getMaHD(), cthd.getMaSP(), cthd.getGia(), cthd.getSoLuong(), cthd.getThanhTien()});
-          }  
-      }
+        jTabbedPane1.setSelectedIndex(1);
+        String maHD = txtMaHD.getText();
+        BLLHoaDon bllHoaDon = new BLLHoaDon();
+        ChiTietHoaDon rs = bllHoaDon.BLLtimcthd(maHD);
+        if (rs != null) {
+            model2.setRowCount(0);
+            j=1;
+            for (ChiTietHoaDon cthd : listCTHD) {
+                if(maHD.equals(cthd.getMaHD())){
+                model2.addRow(new Object[]{
+                    j++, cthd.getMaHD(), cthd.getMaSP(), cthd.getGia(), cthd.getSoLuong(), cthd.getThanhTien()});
+            }  
+        }
     }
     }//GEN-LAST:event_btnChiTietActionPerformed
 

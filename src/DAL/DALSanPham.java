@@ -2,6 +2,7 @@ package DAL;
 
 import DTO.ChiTietSanPham;
 import DTO.DTOSanPham;
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.util.ArrayList;
 import java.sql.*;
 
@@ -9,6 +10,7 @@ public class DALSanPham {
     private Connection c;
     private PreparedStatement p = null;
     private Statement stm = null;
+    private final SQLServerDataSource ds = new SQLServerDataSource();
     public ArrayList <DTOSanPham> spList = new ArrayList<>();
     public ArrayList <ChiTietSanPham> ctspList = new ArrayList<>();
 
