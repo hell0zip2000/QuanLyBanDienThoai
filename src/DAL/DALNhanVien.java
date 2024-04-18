@@ -1,6 +1,7 @@
 package DAL;
 
 import DTO.DTONhanVien;
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,17 +15,31 @@ import java.sql.*;
 public class DALNhanVien{
     private Connection c;
     private PreparedStatement p = null;
+    private final SQLServerDataSource ds = new SQLServerDataSource();
     private ArrayList<DTONhanVien> nvList = new ArrayList<>();
+    
     public DALNhanVien() {
     }
 
     transient Scanner sc = new Scanner(System.in);
      public boolean openConnection() {
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl = "jdbc:sqlserver://localhost:1433;databaseName=QLBDT;encrypt=false";
-            String username = "sa"; String password= "123456";
-            c = DriverManager.getConnection(dbUrl, username, password);
+            String server = "DESKTOP-IHH7KJB\\HUY180903";
+            String user = "sa";
+            String pass = "123456";
+            String db = "QLBDT";
+            int port = 1433;
+            ds.setUser(user);
+            ds.setPassword(pass);
+            ds.setDatabaseName(db);
+            ds.setServerName(server);
+            ds.setPortNumber(port);
+            ds.setEncrypt(false);
+            ds.setIntegratedSecurity(false);
+            ds.setTrustServerCertificate(false);
+            c = ds.getConnection();
+            System.out.println("Kết nối thành công");
+            System.out.println(c.getCatalog());
             return true;
         }catch (Exception ex) {
             ex.printStackTrace();
