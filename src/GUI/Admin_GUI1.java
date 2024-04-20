@@ -26,32 +26,6 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         jpShow.repaint();
         jpShow.validate();
     }
-    
-    public Admin_GUI1(String maquyen) {
-        initComponents();
-        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        QLSP_GUI qlsp = new QLSP_GUI();
-        qlsp.setVisible(false);
-        jpShow.removeAll();
-        jpShow.setLayout(new BorderLayout());
-        jpShow.add(qlsp.getContentPane());
-        jpShow.repaint();
-        jpShow.validate();
-        kiemtraquyen(maquyen);
-    }
-    
-    public void kiemtraquyen(String maquyen){
-        if(maquyen.equals("QK001")){ // Quyền bị hạn chế của nhân viên
-            btnQLSP.setEnabled(false);
-            btnQLKH.setEnabled(false);
-            btnQLNV.setEnabled(false);
-            btnQLHD.setEnabled(false);
-            btnNCC.setEnabled(false);
-            btnQLTK.setEnabled(false);
-            btnKM.setEnabled(false);
-        }
-        else{} // admin
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,13 +39,12 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jpMenu = new javax.swing.JPanel();
-        btnQLSP = new javax.swing.JButton();
         btnQLKH = new javax.swing.JButton();
         btnQLNV = new javax.swing.JButton();
         btnQLHD = new javax.swing.JButton();
         btnNCC = new javax.swing.JButton();
         btnQLPN = new javax.swing.JButton();
-        btnQLTK = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         btnKM = new javax.swing.JButton();
         btnTrangChu = new javax.swing.JButton();
         jpTop = new javax.swing.JPanel();
@@ -94,13 +67,6 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jpMenu.setBackground(new java.awt.Color(0, 102, 102));
-
-        btnQLSP.setText("QUẢN LÝ SẢN PHẨM");
-        btnQLSP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQLSPActionPerformed(evt);
-            }
-        });
 
         btnQLKH.setText("QUẢN LÝ KHÁCH HÀNG");
         btnQLKH.addActionListener(new java.awt.event.ActionListener() {
@@ -137,15 +103,15 @@ public class Admin_GUI1 extends javax.swing.JFrame {
             }
         });
 
-        btnQLTK.setText("QUẢN LÝ TÀI KHOẢN");
-        btnQLTK.addActionListener(new java.awt.event.ActionListener() {
+        jButton7.setText("QUẢN LÝ TÀI KHOẢN");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQLTKActionPerformed(evt);
+                jButton7ActionPerformed(evt);
             }
         });
 
         btnKM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/voucher.png"))); // NOI18N
-        btnKM.setText("Khuyến mãi");
+        btnKM.setText("QUẢN LÝ KHUYẾN MÃI");
         btnKM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnKMActionPerformed(evt);
@@ -166,13 +132,12 @@ public class Admin_GUI1 extends javax.swing.JFrame {
             .addGroup(jpMenuLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnQLSP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQLKH, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQLNV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQLHD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnQLPN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQLTK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnKM, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                 .addGap(0, 6, Short.MAX_VALUE))
             .addGroup(jpMenuLayout.createSequentialGroup()
@@ -186,8 +151,6 @@ public class Admin_GUI1 extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(btnTrangChu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnQLSP, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnQLKH, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnQLNV, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -198,10 +161,10 @@ public class Admin_GUI1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnQLPN, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnQLTK, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnKM, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(317, Short.MAX_VALUE))
         );
 
         jpTop.setBackground(new java.awt.Color(255, 255, 255));
@@ -270,7 +233,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton10)
-                .addGap(77, 77, 77))
+                .addGap(225, 225, 225))
             .addComponent(jpHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jpTopLayout.setVerticalGroup(
@@ -278,14 +241,10 @@ public class Admin_GUI1 extends javax.swing.JFrame {
             .addGroup(jpTopLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(jpHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jpTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpTopLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jpTopLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addGap(1, 1, 1)
+                .addGroup(jpTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton10)))
         );
 
         jpShow.setBackground(new java.awt.Color(255, 255, 255));
@@ -298,7 +257,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         );
         jpShowLayout.setVerticalGroup(
             jpShowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -324,17 +283,6 @@ public class Admin_GUI1 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnQLSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLSPActionPerformed
-        // TODO add your handling code here:
-        QLSP_GUI qlsp = new QLSP_GUI();
-        qlsp.setVisible(false);
-        jpShow.removeAll();
-        jpShow.setLayout(new BorderLayout());
-        jpShow.add(qlsp.getContentPane());
-        jpShow.repaint();
-        jpShow.validate();
-    }//GEN-LAST:event_btnQLSPActionPerformed
 
     private void btnQLKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLKHActionPerformed
         // TODO add your handling code here:
@@ -410,7 +358,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         getContentPane().validate();
     }//GEN-LAST:event_btnTrangChuActionPerformed
 
-    private void btnQLTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQLTKActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         QLTK_GUI tk = new QLTK_GUI();
         tk.setVisible(false);
@@ -419,7 +367,7 @@ public class Admin_GUI1 extends javax.swing.JFrame {
         jpShow.add(tk.getContentPane());
         jpShow.repaint();
         jpShow.validate();
-    }//GEN-LAST:event_btnQLTKActionPerformed
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnNCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNCCActionPerformed
         // TODO add your handling code here:
@@ -475,10 +423,9 @@ public class Admin_GUI1 extends javax.swing.JFrame {
     private javax.swing.JButton btnQLKH;
     private javax.swing.JButton btnQLNV;
     private javax.swing.JButton btnQLPN;
-    private javax.swing.JButton btnQLSP;
-    private javax.swing.JButton btnQLTK;
     private javax.swing.JButton btnTrangChu;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel17;

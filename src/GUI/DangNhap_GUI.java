@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.awt.BorderLayout;
 import javax.swing.JOptionPane;
 import DAL.DALTaiKhoan;
 import BLL.BLLTaiKhoan;
@@ -41,6 +42,7 @@ public class DangNhap_GUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Đăng nhập");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -79,25 +81,26 @@ public class DangNhap_GUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(17, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(17, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(217, 217, 217))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
-                                .addGap(168, 168, 168))))))
+                                .addGap(168, 168, 168))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,7 +108,7 @@ public class DangNhap_GUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(jLabel2)
-                .addGap(52, 52, 52)
+                .addGap(40, 40, 40)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -113,9 +116,9 @@ public class DangNhap_GUI extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -143,26 +146,28 @@ public class DangNhap_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-                String maquyen = "";
-                if (BLLtk.DangNhap(username, password) == true) {
-                    maquyen = (BLLtk.BLLtim(username)).getMaQuyen();
-                    if(maquyen.equals("QQL001")){
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Admin!");
-                        Admin_GUI1 ad = new Admin_GUI1();
-                        ad.setVisible(true); 
-                        dispose();
-                    }else if(maquyen.equals("QK001")){
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào nhân viên kho!");
-                        Admin_GUI1 ad = new Admin_GUI1(maquyen);
-                        ad.setVisible(true);
-                        dispose();
-                    }else{
+                String maquyen = (BLLtk.BLLtim(username)).getMaQuyen();
+                // Kiểm tra tênuals("admin") && password.e đăng nhập và mật khẩu
+                if (BLLtk.DangNhap(username, password)) {
+                    if(maquyen == "admin")
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Admin!");
+                    dispose();
+                    // Hiển thị panel Menu cho Admin
+                    Admin_GUI1 ad = new Admin_GUI1();
+                    ad.setVisible(true);
+                    } else if (maquyen == "nhanvien") {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Nhân viên!");
+                        // Ẩn panel Menu cho Nhân viên
+                        dispose();
                         SanPham_GUI nv = new SanPham_GUI();
                         nv.setVisible(true);
+                    } else if (maquyen == "kho") {
+                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Thủ kho!");
+                        // Ẩn panel Menu cho Nhân viên
                         dispose();
-                    }
-                } else {
+                        ThuKho_GUI kho = new ThuKho_GUI();
+                        kho.setVisible(true);
+                }else{
                     JOptionPane.showMessageDialog(null, "Tài khoản hoặc mật khẩu không chính xác vui lòng thử lại. Vui lòng thử lại!");
                     // Xử lý trường hợp đăng nhập thất bại, như hiển thị thông báo hoặc xoá dữ liệu nhập trước
                 }
