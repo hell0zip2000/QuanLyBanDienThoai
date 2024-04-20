@@ -74,7 +74,7 @@ public class DALNhanVien{
                 nv.setTrangThai(rs.getBoolean("TRANG_THAI"));
                 nv.setVitri(rs.getString("VI_TRI"));
                 nv.setHinhanh(rs.getString("HINH_ANH"));
-                nv.setMaCN(rs.getString("MA_CHI_NHANH"));
+                nv.setMaCN(rs.getString("CHI_NHANH"));
                 nvList.add(nv);
         }
         }catch (SQLException ex) {
@@ -165,7 +165,7 @@ public class DALNhanVien{
                     Boolean trangthai = rs.getBoolean("TRANG_THAI");
                     String vitri = rs.getString("VI_TRI");
                     String hinhanh = rs.getString("HINH_ANH");
-                    String macn = rs.getString("MA_CHI_NHANH");
+                    String macn = rs.getString("CHI_NHANH");
                     DTONhanVien nv = new DTONhanVien(MaNV, ten, sex, NgaySinh, diachi, sdt, luong, vitri, trangthai, hinhanh, macn);
                     return nv;
                 }
@@ -182,7 +182,7 @@ public class DALNhanVien{
         boolean result = false;
         if(openConnection()){
             try{
-                String SQL = "Update NHAN_VIEN set MA_NHAN_VIEN = ?, TEN = ?, SO_DIEN_THOAI = ?, DIA_CHI = ?, GIOI_TINH = ?, LUONG = ?, NAM_SINH = ?, VI_TRI = ?, TRANG_THAI = ?, HINH_ANH = ?, MA_CHI_NHANH = ? where MA_NHAN_VIEN = ?";
+                String SQL = "Update NHAN_VIEN set MA_NHAN_VIEN = ?, TEN = ?, SO_DIEN_THOAI = ?, DIA_CHI = ?, GIOI_TINH = ?, LUONG = ?, NAM_SINH = ?, VI_TRI = ?, TRANG_THAI = ?, HINH_ANH = ?, CHI_NHANH = ? where MA_NHAN_VIEN = ?";
                 p = c.prepareStatement(SQL);
                 p.setString(1, nv.getMaNV());
                 p.setString(2, nv.getTen());

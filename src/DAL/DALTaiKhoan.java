@@ -49,7 +49,28 @@ public class DALTaiKhoan {
         }
     }
     
-        public ArrayList<DTOTaiKhoan> getallTKlist(){
+    public ArrayList<String> laynhanvienchuacoTK(){
+        ArrayList<String> ds = new ArrayList<String>();
+        if(open()){
+            try{
+                String sql = "SELECT * FROM NHAN_VIEN LEFT JOIN TAI_KHOAN ON NHAN_VIEN.MA_NHAN_VIEN = TAI_KHOAN.MA_NHAN_VIEN WHERE TAI_KHOAN.MA_NHAN_VIEN IS NULL;";
+                stm = c.createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                while(rs.next()){
+                    String tk = "";
+                    tk = rs.getString("MA_NHAN_VIEN");
+                    ds.add(tk);
+                }
+            }catch(Exception ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return ds;
+    }
+    
+    public ArrayList<DTOTaiKhoan> getallTKlist(){
         if(open()){
             try{
                 tkList.clear();
@@ -80,7 +101,7 @@ public class DALTaiKhoan {
                 p = c.prepareStatement(sql);
                 p.setString(1, TaiKhoan);
                 ResultSet rs = p.executeQuery();
-                result = rs.next();
+                result = true;
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{
@@ -138,9 +159,8 @@ public class DALTaiKhoan {
         boolean result = false;
         if(open()){
             try{
-                String sql = "DELETA FROM TAI_KHOAN WHERE MA_NHAN_VIEN = ?";
+                String sql = "DELETE FROM TAI_KHOAN WHERE MA_NHAN_VIEN = ?";
                 p = c.prepareStatement(sql);
-                p.executeUpdate();
                 p.setString(1, TK);
                 if(p.executeUpdate() >= 1){
                     result = true;
@@ -154,7 +174,7 @@ public class DALTaiKhoan {
         return result;
     }
     
-    public boolean suaTK(DTOTaiKhoan tk, String TaiKhoan){
+    public boolean suaTK(DTOTaiKhoan tk){
         boolean result = false;
         if(open()){
             try{
@@ -163,7 +183,7 @@ public class DALTaiKhoan {
                 p.setString(1, tk.getTaikhoan());
                 p.setString(2, tk.getMatkhau());
                 p.setString(3, tk.getMaQuyen());
-                p.setString(4, TaiKhoan);
+                p.setString(4, tk.getTaikhoan());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }

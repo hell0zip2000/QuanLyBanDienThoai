@@ -15,7 +15,11 @@ public class BLLTaiKhoan {
     
     public ArrayList<DTOTaiKhoan> BLLgetDL(){
         return DALTK.getallTKlist();
-    }            
+    }       
+    
+    public ArrayList<String> BLLgetDSNVchuacoTK(){
+        return DALTK.laynhanvienchuacoTK();
+    } 
     
     public DTOTaiKhoan BLLtim(String mc){
         if(DALTK.hasTK(mc)){
@@ -35,21 +39,21 @@ public class BLLTaiKhoan {
     }
     
     
-    public String BLLxoa(DTOTaiKhoan tk){
-        if(!DALTK.hasTK(tk.getTaikhoan())){
-            return "Mã khách hàng không tồn tại!";
+    public String BLLxoa(String tk){
+        if(!DALTK.hasTK(tk)){
+            return "Tài khoản không tồn tại!";
         }
-        if(DALTK.xoaTK(tk.getTaikhoan())){
+        if(DALTK.xoaTK(tk)){
             return "Xóa thành công!";
         }
         return "Xóa thất bại!";
     }
     
-    public String BLLsua(DTOTaiKhoan tk, String mc){
+    public String BLLsua(DTOTaiKhoan tk){
         if(!DALTK.hasTK(tk.getTaikhoan())){
-            return "Mã khách hàng không tồn tại!";
+            return "Tài khoản không tồn tại!";
         }
-        if(DALTK.suaTK(tk, mc)){
+        if(DALTK.suaTK(tk)){
             return "Sửa thành công!";
         }
         return "Sửa thất bại!";
