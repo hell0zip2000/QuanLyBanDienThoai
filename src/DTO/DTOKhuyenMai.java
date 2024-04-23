@@ -3,9 +3,8 @@ package DTO;
 import java.sql.Date;
 
 public class DTOKhuyenMai {
-    public String maKhuyenMai, ten;
+    public String maKhuyenMai, ten, loai;
     Date ngayBD, ngayKT;
-    boolean loai;
     float giaTri;
 
     public DTOKhuyenMai()
@@ -13,7 +12,7 @@ public class DTOKhuyenMai {
 
     }
 
-    public DTOKhuyenMai(String maKhuyenMai, Date ngayBD, Date ngayKT, boolean loai, float giaTri, String ten){
+    public DTOKhuyenMai(String maKhuyenMai, Date ngayBD, Date ngayKT, String loai, float giaTri, String ten){
         this.maKhuyenMai = maKhuyenMai;
         this.ngayBD = ngayBD;
         this.ngayKT = ngayKT;
@@ -46,11 +45,11 @@ public class DTOKhuyenMai {
         return giaTri;
     }
 
-    public void setLoai(boolean loai) {
+    public void setLoai(String loai) {
         this.loai = loai;
     }
 
-    public boolean getLoai(){
+    public String getLoai(){
         return loai;
     }
 

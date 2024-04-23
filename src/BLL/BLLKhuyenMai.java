@@ -42,4 +42,8 @@ public class BLLKhuyenMai {
         }
         return null;
     }
+    
+    public ArrayList<DTOKhuyenMai> BLLtimtheoten(String km){
+        return DALKM.timtheoten(km);
+    }
 }

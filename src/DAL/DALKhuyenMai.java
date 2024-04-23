@@ -57,7 +57,7 @@ public class DALKhuyenMai {
                     km.setMaKhuyenMai(rs.getString("MA_KHUYEN_MAI"));
                     km.setNgayBD(rs.getDate("THOI_GIAN_BAT_DAU"));
                     km.setNgayKT(rs.getDate("THOI_GIAN_KET_THUC"));
-                    km.setLoai(rs.getBoolean("LOAI"));
+                    km.setLoai(rs.getString("LOAI"));
                     km.setGiaTri(rs.getFloat("GIA_TRI"));
                     km.setTen(rs.getString("TEN"));
                     kmList.add(km);
@@ -99,7 +99,7 @@ public class DALKhuyenMai {
                 if(rs.next()){
                     Date ngayBD = rs.getDate("THOI_GIAN_BAT_DAU");
                     Date ngayKT = rs.getDate("THOI_GIAN_KET_THUC");
-                    Boolean Loai = rs.getBoolean("LOAI");
+                    String Loai = rs.getString("LOAI");
                     float GiaTri = rs.getFloat("GIA_TRI");
                     String ten = rs.getString("TEN");
                     DTOKhuyenMai km = new DTOKhuyenMai(MaKhuyenMai,ngayBD,ngayKT,Loai,GiaTri,ten);
@@ -123,7 +123,7 @@ public class DALKhuyenMai {
                 p.setString(1,km.getMaKhuyenMai());
                 p.setDate(3, km.getNgayBD());
                 p.setDate(4, km.getNgayKT());
-                p.setBoolean(5, km.getLoai());
+                p.setString(5, km.getLoai());
                 p.setString(2, km.getTen());
                 p.setFloat(6, km.getGiaTri());
                 if(p.executeUpdate() >= 1){
@@ -167,7 +167,7 @@ public class DALKhuyenMai {
                 p.setString(1, km.getMaKhuyenMai());
                 p.setDate(2, km.getNgayBD());
                 p.setDate(3, km.getNgayKT());
-                p.setBoolean(4, km.getLoai());
+                p.setString(4, km.getLoai());
                 p.setFloat(5, km.getGiaTri());
                 p.setString(6, km.getTen());
                 p.setString(7, km.getMaKhuyenMai());
@@ -181,5 +181,31 @@ public class DALKhuyenMai {
             }
         }
         return result;
+    }
+    
+    public ArrayList<DTOKhuyenMai> timtheoten(String ten){
+        try{
+            if(open()){
+                kmList.clear();
+                String sql = "SELECT * FROM KHUYEN_MAI WHERE LOWER(TEN) LIKE LOWER(?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, "%" + ten + "%");
+                ResultSet rs = p.executeQuery();
+                while(rs.next()){
+                    String ma = rs.getString("MA_KHUYEN_MAI");
+                    Date soluong = rs.getDate("THOI_GIAN_BAT_DAU");
+                    Date img = rs.getDate("THOI_GIAN_KET_THUC");
+                    String giaban = rs.getString("LOAI");
+                    float gianhap = rs.getFloat("GIA_TRI");
+                    DTOKhuyenMai sp = new DTOKhuyenMai(ma,soluong,img,giaban,gianhap,ten);
+                    kmList.add(sp);
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return kmList;
     }
 }
