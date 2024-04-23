@@ -2,9 +2,9 @@ package DTO;
 
 public class ChiTietHoaDon {
 
-    private String MaHD, MaSP;
-    private int soLuong; 
-    private float Gia,ThanhTien;
+    public String MaHD, MaSP;
+    public int soLuong; 
+    public float Gia,ThanhTien;
     public ChiTietHoaDon(){
         this.MaHD = "";
         this.MaSP = "";

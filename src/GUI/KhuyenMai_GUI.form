@@ -79,8 +79,6 @@
                   <Component id="txtTim" min="-2" pref="441" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cbbTim" min="-2" pref="153" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="cbbSapXep" min="-2" pref="153" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -134,7 +132,6 @@
                       <Component id="btnTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="txtTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       <Component id="cbbTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="cbbSapXep" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -336,23 +333,6 @@
               </StringArray>
             </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="cbbSapXep">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="3">
-                <StringItem index="0" value="Gi&#xe1; b&#xe1;n"/>
-                <StringItem index="1" value="Gi&#xe1; Nh&#x1ead;p"/>
-                <StringItem index="2" value="B&#x1ea3;o H&#xe0;nh"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbbSapXepActionPerformed"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

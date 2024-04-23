@@ -28,8 +28,6 @@ public class DALKhuyenMai {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch(Exception ex){
             System.out.println(ex);
@@ -57,8 +55,8 @@ public class DALKhuyenMai {
                 while(rs.next()){
                     DTOKhuyenMai km = new DTOKhuyenMai();
                     km.setMaKhuyenMai(rs.getString("MA_KHUYEN_MAI"));
-                    km.setNgayBD(rs.getDate("NGAY_BAT_DAU"));
-                    km.setNgayKT(rs.getDate("NGAY_KET_THUC"));
+                    km.setNgayBD(rs.getDate("THOI_GIAN_BAT_DAU"));
+                    km.setNgayKT(rs.getDate("THOI_GIAN_KET_THUC"));
                     km.setLoai(rs.getBoolean("LOAI"));
                     km.setGiaTri(rs.getFloat("GIA_TRI"));
                     km.setTen(rs.getString("TEN"));
@@ -99,8 +97,8 @@ public class DALKhuyenMai {
                 p.setString(1, MaKhuyenMai);
                 ResultSet rs = p.executeQuery();
                 if(rs.next()){
-                    Date ngayBD = rs.getDate("NGAY_BAT_DAU");
-                    Date ngayKT = rs.getDate("NGAY_KET_THUC");
+                    Date ngayBD = rs.getDate("THOI_GIAN_BAT_DAU");
+                    Date ngayKT = rs.getDate("THOI_GIAN_KET_THUC");
                     Boolean Loai = rs.getBoolean("LOAI");
                     float GiaTri = rs.getFloat("GIA_TRI");
                     String ten = rs.getString("TEN");
@@ -164,7 +162,7 @@ public class DALKhuyenMai {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE KHUYEN_MAI SET  MA_KHUYEN_MAI = ?, NGAY_BAT_DAU = ?, NGAY_KET_THUC = ?, LOAI = ?, GIA_TRI = ?, TEN = ? WHERE MA_KHUYEN_MAI = ? ";
+                String SQL = "UPDATE KHUYEN_MAI SET  MA_KHUYEN_MAI = ?, THOI_GIAN_BAT_DAU = ?, tHOI_GIAN_KET_THUC = ?, LOAI = ?, GIA_TRI = ?, TEN = ? WHERE MA_KHUYEN_MAI = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, km.getMaKhuyenMai());
                 p.setDate(2, km.getNgayBD());

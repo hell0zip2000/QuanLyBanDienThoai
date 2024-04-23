@@ -30,8 +30,6 @@ public class DALHoaDon {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -277,20 +275,21 @@ public boolean xoaHD(DTOHoaDon hd){
         return result;
     }
     
-    public ChiTietHoaDon timcthdtheomahd(String MaHD){
+    public ArrayList<ChiTietHoaDon> timcthdtheomahd(String MaHD){
+        ArrayList<ChiTietHoaDon> listcthd = new ArrayList<ChiTietHoaDon>();
         if(open()){
             try{
                     String sql = "SELECT * FROM CHI_TIET_HOA_DON WHERE MA_HOA_DON=?";
                     p = c.prepareStatement(sql);
                     p.setString(1, MaHD);
                     ResultSet rs = p.executeQuery();
-                    if(rs.next()){
+                    while(rs.next()){
                         String MaSP = rs.getString("MA_SAN_PHAM");
                         int SoLuong = rs.getInt("SO_LUONG");
                         float Gia = rs.getFloat("GIA");
                         float ThanhTien = rs.getFloat("THANH_TIEN");
                         ChiTietHoaDon cthd = new ChiTietHoaDon(MaHD,MaSP,SoLuong,Gia,ThanhTien);
-                        return cthd;
+                        listcthd.add(cthd);
                 }
             }catch(SQLException ex){
                 System.out.println(ex);
@@ -298,7 +297,7 @@ public boolean xoaHD(DTOHoaDon hd){
                 close();
             }
         }
-        return null;
+        return listcthd;
     }
     
     public boolean xoaCTHD(String mahd){
@@ -338,5 +337,59 @@ public boolean xoaHD(DTOHoaDon hd){
             }
         }
         return total;
+    }
+    
+    public DTOHoaDon timtheomakh(String MaHD){
+        try{
+            if(open()){
+                String sql = "SELECT * FROM HOA_DON WHERE MA_KHACH_HANG=?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaHD);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    String mnv = rs.getString("MA_NHAN_VIEN");
+                    String mkh = rs.getString("MA_KHACH_HANG");
+                    String mkm = rs.getString("MA_KHUYEN_MAI");
+                    Date tgtao = rs.getDate("THOI_GIAN_TAO");
+                    int soluong = rs.getInt("TONG_SO_LUONG");
+                    Double gia = rs.getDouble("TONG_GIA"); 
+                    Double tien = rs.getDouble("THANH_TIEN"); 
+                    DTOHoaDon hd = new DTOHoaDon(MaHD,mnv,mkh,mkm,tgtao,soluong,gia,tien);
+                    return hd;
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return null;
+    }
+        
+    public DTOHoaDon timtheomanv(String MaHD){
+        try{
+            if(open()){
+                String sql = "SELECT * FROM HOA_DON WHERE MA_NHAN_VIEN=?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaHD);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    String mnv = rs.getString("MA_NHAN_VIEN");
+                    String mkh = rs.getString("MA_KHACH_HANG");
+                    String mkm = rs.getString("MA_KHUYEN_MAI");
+                    Date tgtao = rs.getDate("THOI_GIAN_TAO");
+                    int soluong = rs.getInt("TONG_SO_LUONG");
+                    Double gia = rs.getDouble("TONG_GIA"); 
+                    Double tien = rs.getDouble("THANH_TIEN"); 
+                    DTOHoaDon hd = new DTOHoaDon(MaHD,mnv,mkh,mkm,tgtao,soluong,gia,tien);
+                    return hd;
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return null;
     }
 }

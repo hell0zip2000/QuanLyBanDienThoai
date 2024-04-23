@@ -74,10 +74,25 @@ public class BLLHoaDon {
         return "Sửa thất bại!";
     }
     
-    public ChiTietHoaDon BLLtimcthd(String mc){
+//    public ChiTietHoaDon BLLtimcthd(String mc){
+//        if(DALHD.hasHD(mc)){
+//            return DALHD.timcthdtheomahd(mc);
+//        }
+//        return null;
+//    }
+    public DTOHoaDon BLLtimtheomakh(String mc){
         if(DALHD.hasHD(mc)){
-            return DALHD.timcthdtheomahd(mc);
+            return DALHD.timtheomakh(mc);
         }
         return null;
+    }
+    public DTOHoaDon BLLtimtheomanv(String mc){
+        if(DALHD.hasHD(mc)){
+            return DALHD.timtheomanv(mc);
+        }
+        return null;
+    }
+    public ArrayList<ChiTietHoaDon> BLLgetCTHD(String ma){
+        return DALHD.timcthdtheomahd(ma);
     }
 }
