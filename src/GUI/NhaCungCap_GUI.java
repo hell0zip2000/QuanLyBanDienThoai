@@ -4,17 +4,93 @@
  */
 package GUI;
 
+
+import BLL.BLLNhaCungCap;
+import DTO.DTOKhachHang;
+import DTO.DTONhaCungCap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADMIN
  */
 public class NhaCungCap_GUI extends javax.swing.JFrame {
 
+    BLLNhaCungCap BLLncc = new BLLNhaCungCap();
+    DefaultTableModel model;
     /**
      * Creates new form NhaCungCap_GUI
      */
     public NhaCungCap_GUI() {
         initComponents();
+        loadNCC();
+        maTuDong();
+    }
+    
+    public void loadNCC(){
+        model = new DefaultTableModel();
+        model.addColumn("Mã nhà cung cấp");
+        model.addColumn("Tên nhà cung cấp");
+        model.addColumn("Địa chỉ");
+        model.addColumn("SDT");
+        tbNCC.setModel(model);
+        ArrayList<DTONhaCungCap> arr = new ArrayList<DTONhaCungCap>();
+        arr = BLLncc.BLLgetDL();
+        for (int i = 0; i < arr.size(); i++){
+            DTONhaCungCap sp = arr.get(i);
+            String MaSP = sp.getMaNCC();
+            String TenSP = sp.getTenNCC();
+            String GiaBan = sp.getDiaChi();
+            String GiaNhap = sp.getSDT();
+            Object[] row = {MaSP, TenSP, GiaBan, GiaNhap};
+            model.addRow(row);
+        }
+    }
+    
+    public static String tangMaSP(ArrayList<String> danhSachMaSP) {
+        String maxMaSP = ""; 
+        for (String maSP : danhSachMaSP) {
+            if (maSP.compareTo(maxMaSP) > 0) {
+                maxMaSP = maSP;
+            }
+        }
+        if (maxMaSP == null || maxMaSP.isEmpty()) {
+            return "SP001"; // Giả sử mã đầu tiên là "SP001"
+        }
+        // Tăng mã 
+        String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSP.substring(4));
+        suffix++;
+        // Trả về mã mới
+        return prefix + String.format("%d", suffix);
+    }
+    
+    public ArrayList<String> laydsma(){
+        ArrayList<String> dsma = new ArrayList<String>();
+        for(DTONhaCungCap sp : BLLncc.BLLgetDL()){
+            dsma.add(sp.getMaNCC());
+        }
+        return dsma;
+    }
+    
+    public void maTuDong(){
+        String newMaSP = tangMaSP(laydsma());
+        txtMaNCC.setText(newMaSP);
+    }
+    
+    public void trangThaiBanDau(){
+        txtTenNCC.setText("");
+        txtDiaChi.setText("");
+        txtSDT.setText("");
+        maTuDong();
     }
 
     /**
@@ -28,30 +104,29 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbNCC = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        txtMaNCC = new javax.swing.JTextField();
+        txtTenNCC = new javax.swing.JTextField();
+        txtDiaChi = new javax.swing.JTextField();
+        txtSDT = new javax.swing.JTextField();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
+        btnCapNhat = new javax.swing.JButton();
         btnTim = new javax.swing.JButton();
         txtTim = new javax.swing.JTextField();
         cbbTim = new javax.swing.JComboBox<>();
-        cbbSapXep = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(0, 102, 102));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbNCC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -62,9 +137,14 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
                 "Mã nhà cung cấp", "Tên nhà cung cấp", "Địa chỉ", "SĐT"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        tbNCC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbNCCMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbNCC);
+        if (tbNCC.getColumnModel().getColumnCount() > 0) {
+            tbNCC.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -79,42 +159,47 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Số điện thoại");
 
-        jTextField1.setText("jTextField1");
+        txtMaNCC.setEditable(false);
 
-        jTextField2.setText("jTextField2");
-
-        jTextField3.setText("jTextField3");
-
-        jTextField4.setText("jTextField4");
-
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 102, 102));
-        jButton1.setText("THÊM");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtSDT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtSDTActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 102, 102));
-        jButton2.setText("SỬA");
-
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 102, 102));
-        jButton3.setText("XOÁ");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(0, 102, 102));
+        btnThem.setText("THÊM");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnThemActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 102, 102));
-        jButton4.setText("LƯU");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnSua.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(0, 102, 102));
+        btnSua.setText("SỬA");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnSuaActionPerformed(evt);
+            }
+        });
+
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(0, 102, 102));
+        btnXoa.setText("XOÁ");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
+
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCapNhat.setForeground(new java.awt.Color(0, 102, 102));
+        btnCapNhat.setText("CẬP NHẬT");
+        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCapNhatActionPerformed(evt);
             }
         });
 
@@ -138,21 +223,14 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
             }
         });
 
-        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã sản phẩm", "Tên sản phẩm ", "Mã nhà cung cấp" }));
-
-        cbbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giá bán", "Giá Nhập", "Bảo Hành" }));
-        cbbSapXep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbSapXepActionPerformed(evt);
-            }
-        });
+        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã nhà cung cấp", "Tên nhà cung cấp" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -160,30 +238,30 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1))
+                                .addComponent(txtMaNCC))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField4))
+                                .addComponent(txtSDT))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2))
+                                .addComponent(txtTenNCC))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField3)))
+                                .addComponent(txtDiaChi)))
                         .addGap(6, 6, 6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(37, Short.MAX_VALUE))))
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                        .addComponent(btnCapNhat)
+                        .addContainerGap(12, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnTim)
@@ -191,8 +269,6 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
                 .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -204,31 +280,30 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
                         .addGap(46, 46, 46)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtMaNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtTenNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -246,17 +321,51 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        try{
+            if(txtMaNCC.getText().trim().equals("") ||
+                txtTenNCC.getText().trim().equals("") ||
+                txtDiaChi.getText().trim().equals("") ||
+                txtSDT.getText().trim().equals("")){
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+            JOptionPane.showMessageDialog(null,"Không được để trống thông tin, vui lòng nhập lại thông tin");
+            }
+            else{
+                DTONhaCungCap kh = new DTONhaCungCap();
+                kh.setMaNCC(txtMaNCC.getText());
+                kh.setTenNCC(txtTenNCC.getText());
+                kh.setDiaChi(txtDiaChi.getText());
+                kh.setSDT(txtSDT.getText());
+                JOptionPane.showMessageDialog(null,BLLncc.BLLthem(kh));
+                loadNCC();
+                maTuDong();
+                trangThaiBanDau();
+            }
+        }
+        catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null,"Thông tin không hợp lệ");
+        }
+    }//GEN-LAST:event_btnThemActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        int i = tbNCC.getSelectedRow();
+        String masp;
+        if(i >= 0){
+            masp = model.getValueAt(i, 0).toString();
+            JOptionPane.showMessageDialog(this,BLLncc.BLLxoa(masp));
+            loadNCC();
+            trangThaiBanDau();
+        }else{
+            JOptionPane.showMessageDialog(this, "Hãy chọn 1 dòng để xóa");
+        } 
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+        // TODO add your handling code here:
+        trangThaiBanDau();
+    }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
@@ -267,49 +376,34 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
         }else{
             String selectedValue = cbbTim.getSelectedItem().toString();
             switch (selectedValue) {
-                case "Mã sản phẩm":
-                String maSPCanTim = txtTim.getText();
-                DTOSanPham ketQuaMaSP = BLLsp.BLLtimtheomasp(maSPCanTim);
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    Object[] row = {ketQuaMaSP.getMaSanPham(),ketQuaMaSP.getTenSanPham(),ketQuaMaSP.getGiaBan(),ketQuaMaSP.getGiaNhap(),ketQuaMaSP.getSoLuong(),ketQuaMaSP.getMaNCC(),ketQuaMaSP.getBaoHanh(),ketQuaMaSP.getImg()};
-                    model.addRow(row);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã sản phẩm");
-                }
-                break;
-                case "Tên sản phẩm":
-                String tenSachCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-                if (ketQuaTenSach.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTenSach){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
-                }
-                break;
                 case "Mã nhà cung cấp":
-                String theLoaiCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-                if (ketQuaTL.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTL){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getImg()};
+                    String maSPCanTim = txtTim.getText();
+                    DTONhaCungCap ketQuaMaSP = BLLncc.BLLtim(maSPCanTim);
+                    if (ketQuaMaSP != null){
+                        model = (DefaultTableModel) tbNCC.getModel();
+                        model.setRowCount(0);
+                        Object[] row = {ketQuaMaSP.getMaNCC(),ketQuaMaSP.getTenNCC(),ketQuaMaSP.getDiaChi(),ketQuaMaSP.getSDT()};
                         model.addRow(row);
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã nhà cung cấp");
-                }
-                break;
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp");
+                    }
+                    break;
+                case "Tên sản phẩm":
+                    String tenSachCanTim = txtTim.getText();
+                    ArrayList<DTONhaCungCap> ketQuaTenSach = BLLncc.BLLtimtheoten(tenSachCanTim);
+                    if (ketQuaTenSach.size() > 0){
+                        model = (DefaultTableModel) tbNCC.getModel();
+                        model.setRowCount(0);
+                        for(DTONhaCungCap s : ketQuaTenSach){
+                            Object[] row = {s.getMaNCC(),s.getTenNCC(),s.getDiaChi(),s.getSDT()};
+                            model.addRow(row);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
+                    }
+                    break;
                 default:
                 throw new AssertionError();
             }
@@ -325,134 +419,87 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
         int selectedValue = cbbTim.getSelectedIndex();
         switch (selectedValue) {
             case 0:
-            String maSachCanTim = txtTim.getText();
-            DTOSanPham ketQuaMaSach = BLLsp.BLLtimtheomasp(maSachCanTim);
-            if (ketQuaMaSach != null){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                Object[] row = {ketQuaMaSach.getMaSanPham(),ketQuaMaSach.getTenSanPham(),ketQuaMaSach.getGiaBan(),ketQuaMaSach.getGiaNhap(),ketQuaMaSach.getSoLuong(),ketQuaMaSach.getMaNCC(),ketQuaMaSach.getBaoHanh(),ketQuaMaSach.getImg()};
-                model.addRow(row);
-            }else{
-                loadSP();
-            }
-            break;
+                String maSachCanTim = txtTim.getText();
+                DTONhaCungCap ketQuaMaSach = BLLncc.BLLtim(maSachCanTim);
+                if (ketQuaMaSach != null){
+                    model = (DefaultTableModel) tbNCC.getModel();
+                    model.setRowCount(0);
+                    Object[] row = {ketQuaMaSach.getMaNCC(),ketQuaMaSach.getTenNCC(),ketQuaMaSach.getDiaChi(),ketQuaMaSach.getSDT()};
+                    model.addRow(row);
+                }else{
+                    loadNCC();
+                }
+                break;
             case 1:
-            String tenSachCanTim = txtTim.getText().toString();
-            ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-            for(DTOSanPham sp : ketQuaTenSach){
-                System.out.println(sp.getMaSanPham());
-            }
-            if (!ketQuaTenSach.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTenSach){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                String tenSachCanTim = txtTim.getText().toString();
+                ArrayList<DTONhaCungCap> ketQuaTenSach = BLLncc.BLLtimtheoten(tenSachCanTim);
+                if (!ketQuaTenSach.isEmpty()){
+                    model = (DefaultTableModel) tbNCC.getModel();
+                    model.setRowCount(0);
+                    for(DTONhaCungCap s : ketQuaTenSach){
+                        Object[] row = {s.getMaNCC(),s.getTenNCC(),s.getDiaChi(),s.getSDT()};
+                        model.addRow(row);
+                    }
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
-            case 2:
-            String theLoaiCanTim = txtTim.getText();
-            ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-            if (!ketQuaTL.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTL){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                else{
+                    loadNCC();
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
+                break;
             default:
             throw new AssertionError();
         }
     }//GEN-LAST:event_txtTimKeyReleased
 
-    private void cbbSapXepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSapXepActionPerformed
+    private void txtSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSDTActionPerformed
         // TODO add your handling code here:
-        if(cbbSapXep.getSelectedItem() == ""){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn sắp xếp");
-        }else{
-            int selectedValue = cbbSapXep.getSelectedIndex();
-            ArrayList<DTOSanPham> ketQuaMaSP = BLLsp.BLLgetDL();
-            switch (selectedValue) {
-                case 0:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaBan() > ketQuaMaSP.get(i  + 1).getGiaBan()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 1:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaNhap() > ketQuaMaSP.get(i  + 1).getGiaNhap()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 2:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getBaoHanh() > ketQuaMaSP.get(i  + 1).getBaoHanh()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                default:
-                throw new AssertionError();
+    }//GEN-LAST:event_txtSDTActionPerformed
+
+    private void tbNCCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbNCCMouseClicked
+        // TODO add your handling code here:
+        try{
+            int i = tbNCC.getSelectedRow();
+            if(i >= 0){
+                txtMaNCC.setText(model.getValueAt(i, 0).toString());
+                txtTenNCC.setText(model.getValueAt(i, 1).toString());
+                txtDiaChi.setText(model.getValueAt(i, 2).toString());
+                txtSDT.setText(model.getValueAt(i, 3).toString());
             }
         }
-    }//GEN-LAST:event_cbbSapXepActionPerformed
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex);
+        } 
+    }//GEN-LAST:event_tbNCCMouseClicked
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // TODO add your handling code here:
+        try {
+            int i = tbNCC.getSelectedRow(); 
+            DTONhaCungCap sp = new DTONhaCungCap();
+            if (i>=0){
+                if(txtMaNCC.getText().trim().equals("") ||
+                    txtTenNCC.getText().trim().equals("") ||
+                    txtDiaChi.getText().trim().equals("") ||
+                    txtSDT.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Không được để trống thông tin nhà cung cấp!");
+                }
+                else{
+                    sp.setMaNCC(txtMaNCC.getText()); 
+                    sp.setTenNCC(txtTenNCC.getText());
+                    sp.setDiaChi(txtDiaChi.getText());
+                    sp.setSDT(txtSDT.getText());
+                    JOptionPane.showMessageDialog(this, BLLncc.BLLsua(sp));
+                    loadNCC();
+                    trangThaiBanDau();
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Hãy chọn 1 dòng để sửa");
+            }
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(this, "Lỗi");
+            JOptionPane.showMessageDialog(this, e);
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_btnSuaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -490,24 +537,23 @@ public class NhaCungCap_GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCapNhat;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTim;
-    private javax.swing.JComboBox<String> cbbSapXep;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> cbbTim;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTable tbNCC;
+    private javax.swing.JTextField txtDiaChi;
+    private javax.swing.JTextField txtMaNCC;
+    private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtTenNCC;
     private javax.swing.JTextField txtTim;
     // End of variables declaration//GEN-END:variables
 }

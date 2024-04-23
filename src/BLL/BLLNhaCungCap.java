@@ -29,8 +29,8 @@ public class BLLNhaCungCap {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTONhaCungCap ncc){
-        if(!DALNCC.hasNCC(ncc.getMaNCC())){
+    public String BLLxoa(String ncc){
+        if(!DALNCC.hasNCC(ncc)){
             return "Mã nhà cung cấp không tồn tại!";
         }
         if(DALNCC.xoaNCC(ncc)){
@@ -51,5 +51,9 @@ public class BLLNhaCungCap {
             return DALNCC.timtheomaNCC(mc);
         }
         return null;
+    }
+    
+    public ArrayList<DTONhaCungCap> BLLtimtheoten(String mc){
+        return DALNCC.timtheoten(mc);
     }
 }

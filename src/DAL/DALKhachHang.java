@@ -140,13 +140,13 @@ public class DALKhachHang {
         return result;
     }
     
-    public boolean xoaKH(DTOKhachHang kh){
+    public boolean xoaKH(String kh){
         boolean result = false;
         if(open()){
             try{
                 String sql = "DELETE FROM KHACH_HANG WHERE MA_KHACH_HANG = ?";
                 p = c.prepareStatement(sql);
-                p.setString(1, kh.getMaKH());
+                p.setString(1, kh);
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -185,6 +185,11 @@ public class DALKhachHang {
         return result;
     }
     
+    /**
+     *
+     * @param tenkh
+     * @return
+     */
     public ArrayList<DTOKhachHang> timtheoten(String tenkh){
         try{
             if(open()){

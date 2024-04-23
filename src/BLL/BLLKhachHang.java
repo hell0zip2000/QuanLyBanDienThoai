@@ -27,7 +27,7 @@ public class BLLKhachHang {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTOKhachHang kh){
+    public String BLLxoa(String kh){
         if(DALKH.xoaKH(kh)){
             return "Xóa thành công!";
         }
@@ -46,5 +46,9 @@ public class BLLKhachHang {
             return DALKH.timtheomakh(mc);
         }
         return null;
+    }
+    
+    public ArrayList<DTOKhachHang> BLLtimtheoten(String mc){
+        return DALKH.timtheoten(mc);
     }
 }

@@ -3,7 +3,6 @@ package DAL;
 import DTO.DTONhaCungCap;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +16,7 @@ public class DALNhaCungCap {
     private PreparedStatement p = null;
     private Statement stm = null;
 
-    public boolean openConnection() {
+    public boolean open() {
         try {
             String server = "DESKTOP-IHH7KJB\\HUY180903";
             String user = "sa";
@@ -33,8 +32,6 @@ public class DALNhaCungCap {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch (Exception ex) {
             ex.printStackTrace();
@@ -42,7 +39,7 @@ public class DALNhaCungCap {
         } 
      }
 
-    public void closeConnection() {
+    public void close() {
         try {
             if (c!=null)
             c.close();
@@ -52,7 +49,7 @@ public class DALNhaCungCap {
     }
      
     public ArrayList<DTONhaCungCap> getAllNCC(){
-        if(openConnection()){
+        if(open()){
             try{
                 nccList.clear();
                 stm = c.createStatement();
@@ -69,7 +66,7 @@ public class DALNhaCungCap {
             }catch (SQLException ex) {
                 ex.printStackTrace();
             }finally {
-                closeConnection();
+                close();
             } 
         }
         return nccList;
@@ -78,7 +75,7 @@ public class DALNhaCungCap {
     public boolean AddNCC(DTONhaCungCap NCC)
     {
         boolean result = false;
-        if (openConnection()) {
+        if (open()) {
             try{
                 PreparedStatement stmt  = c.prepareStatement("insert into NHA_CUNG_CAP values(?,?,?,?)");
                 stmt.setString(1, NCC.getMaNCC());
@@ -90,25 +87,25 @@ public class DALNhaCungCap {
             }catch (SQLException ex) {
             ex.printStackTrace();
             }finally {
-            closeConnection();
+            close();
             } 
         }
         return result;
     }
     
-    public boolean xoaNCC(DTONhaCungCap NCC){
+    public boolean xoaNCC(String NCC){
         boolean result = false;
-        if(openConnection()){
+        if(open()){
             try{
                 PreparedStatement stmt  = c.prepareStatement("delete from NHA_CUNG_CAP where MA_NHA_CUNG_CAP = (?)");
-               stmt.setString(1, NCC.getMaNCC());
+               stmt.setString(1, NCC);
                 if(stmt.executeUpdate() >= 1){
                     result = true;
                 }
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{
-                closeConnection();
+                close();
             }
         }
         return result;
@@ -116,7 +113,7 @@ public class DALNhaCungCap {
 
     public boolean hasNCC(String MaNCC){
         boolean result = false;
-        if(openConnection()){
+        if(open()){
             try{
                 Statement stmt = c.createStatement();
                 ResultSet rs = stmt.executeQuery("Select *from NHA_CUNG_CAP where MA_NHA_CUNG_CAP = '"+MaNCC+"'");
@@ -124,7 +121,7 @@ public class DALNhaCungCap {
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{
-                closeConnection();
+                close();
             }
         }
         return result;
@@ -132,7 +129,7 @@ public class DALNhaCungCap {
     
     public DTONhaCungCap timtheomaNCC(String MaNCC){
         try{
-            if(openConnection()){
+            if(open()){
                 Statement stmt = c.createStatement();
                 ResultSet rs = stmt.executeQuery("Select *from NHA_CUNG_CAP where MA_NHA_CUNG_CAP = '"+MaNCC+"'");
                 if(rs.next()){
@@ -146,14 +143,14 @@ public class DALNhaCungCap {
         }catch(SQLException ex){
             System.out.println(ex);
         }finally{
-            closeConnection();
+            close();
         }
             return null;
         }
         
     public boolean suaNCC(DTONhaCungCap NCC){
         boolean result = false;
-        if(openConnection()){
+        if(open()){
             try{
                 String SQL = "Update NHA_CUNG_CAP set MA_NHA_CUNG_CAP = ?, TEN = ?, DIA_CHI = ?, SDT = ? where MA_NHA_CUNG_CAP = ?";
                 p = c.prepareStatement(SQL);
@@ -169,9 +166,34 @@ public class DALNhaCungCap {
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{
-                closeConnection();
+                close();
             }
         }
         return result;
+    }
+    
+    public ArrayList<DTONhaCungCap> timtheoten(String ten){
+        try{
+            if(open()){
+                nccList.clear();
+                String sql = "SELECT * FROM NHA_CUNG_CAP WHERE LOWER(TEN) LIKE LOWER(?)";
+                p = c.prepareStatement(sql);
+                p.setString(1, "%" + ten + "%");
+                ResultSet rs = p.executeQuery();
+                while(rs.next()){
+                    String ma = rs.getString("MA_NHA_CUNG_CAP");
+                    String tensach = rs.getString("TEN");
+                    String soluong = rs.getString("DIA_CHI");
+                    String img = rs.getString("SDT");
+                    DTONhaCungCap sp = new DTONhaCungCap(ma,tensach,soluong,img);
+                    nccList.add(sp);
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return nccList;
     }
 }

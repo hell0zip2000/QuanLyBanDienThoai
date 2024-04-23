@@ -156,7 +156,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tbKH">
+            <Component class="javax.swing.JTable" name="tbKhachHang">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="4">
@@ -167,6 +167,9 @@
                   </Table>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbKhachHangMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -181,7 +184,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="7" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel4" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
@@ -198,9 +201,9 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="rbtNu" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="txtID" alignment="0" min="-2" pref="450" max="-2" attributes="0"/>
+                          <Component id="txtMaKH" alignment="0" min="-2" pref="450" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="58" max="32767" attributes="0"/>
+                      <EmptySpace pref="59" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel6" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
                           <Component id="jLabel7" alignment="0" min="-2" pref="174" max="-2" attributes="0"/>
@@ -214,23 +217,23 @@
                           <Component id="txtSLHD" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtGiaTriHD" alignment="0" min="-2" pref="405" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="9" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace pref="31" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnTim" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="txtTim" min="-2" pref="435" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbbTim" min="-2" pref="153" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbbSapXep" min="-2" pref="153" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="cbbTim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnThem" min="-2" pref="110" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnSua" min="-2" pref="110" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnXoa" min="-2" pref="110" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnCapNhat" min="-2" pref="110" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -242,7 +245,7 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="txtDiaChi" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
                           <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                              <Component id="txtID" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="txtMaKH" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="jLabel2" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="jLabel7" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
@@ -277,7 +280,7 @@
                           <Component id="btnTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           <Component id="txtTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           <Component id="cbbTim" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="cbbSapXep" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="btnCapNhat" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
@@ -295,12 +298,12 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtSDT">
             </Component>
-            <Component class="javax.swing.JTextField" name="txtID">
+            <Component class="javax.swing.JTextField" name="txtMaKH">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIDActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtMaKHActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTen">
@@ -310,7 +313,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="ID"/>
+                <Property name="text" type="java.lang.String" value="M&#xe3; kh&#xe1;ch h&#xe0;ng"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtGiaTriHD">
@@ -408,30 +411,12 @@
             <Component class="javax.swing.JComboBox" name="cbbTim">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="M&#xe3; s&#x1ea3;n ph&#x1ea9;m"/>
-                    <StringItem index="1" value="T&#xea;n s&#x1ea3;n ph&#x1ea9;m "/>
-                    <StringItem index="2" value="M&#xe3; nh&#xe0; cung c&#x1ea5;p"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="M&#xe3; kh&#xe1;ch h&#xe0;ng"/>
+                    <StringItem index="1" value="T&#xea;n kh&#xe1;ch h&#xe0;ng "/>
                   </StringArray>
                 </Property>
               </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="cbbSapXep">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="3">
-                    <StringItem index="0" value="Gi&#xe1; b&#xe1;n"/>
-                    <StringItem index="1" value="Gi&#xe1; Nh&#x1ead;p"/>
-                    <StringItem index="2" value="B&#x1ea3;o H&#xe0;nh"/>
-                  </StringArray>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbbSapXepActionPerformed"/>
-              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -474,6 +459,23 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="XO&#xc1;"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnXoaActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnCapNhat">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="14" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="66" green="66" red="0" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="C&#x1eac;P NH&#x1eac;T"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCapNhatActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -973,9 +973,6 @@ public class QLSP_GUI extends javax.swing.JFrame {
             case 1:
                 String tenSachCanTim = txtTim.getText().toString();
                 ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-                for(DTOSanPham sp : ketQuaTenSach){
-                    System.out.println(sp.getMaSanPham());
-                }
                 if (!ketQuaTenSach.isEmpty()){
                     model = (DefaultTableModel) tbSanPham.getModel();
                     model.setRowCount(0);

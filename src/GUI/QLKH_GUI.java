@@ -7,6 +7,7 @@ package GUI;
 
 import BLL.BLLKhachHang;
 import DTO.DTOKhachHang;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -31,14 +32,13 @@ public class QLKH_GUI extends javax.swing.JFrame {
     
     public void loadKhachHang(){
         model = new DefaultTableModel();
-        model.addColumn("STT");
-        model.addColumn("ID");
+        model.addColumn("Mã khách hàng");
         model.addColumn("Tên Khách Hàng");
         model.addColumn("Giới Tính");
         model.addColumn("Năm Sinh");
         model.addColumn("Địa Chỉ");
         model.addColumn("SĐT");
-        tbKH.setModel(model);
+        tbKhachHang.setModel(model);
         ArrayList<DTOKhachHang> arr = new ArrayList<DTOKhachHang>();
         arr = BLLkh.BLLgetDL();
         for (int i = 0; i < arr.size(); i++){
@@ -49,7 +49,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
             String DiaChi = kh.getDiaChi();
             String SDT =kh.getSDT();
             String sex = kh.getSex();
-            Object[] row = {i+1, MaDG, TenDG, sex, NgaySinh, DiaChi, SDT};
+            Object[] row = {MaDG, TenDG, sex, NgaySinh, DiaChi, SDT};
             model.addRow(row);
         }
     }
@@ -83,10 +83,11 @@ public class QLKH_GUI extends javax.swing.JFrame {
     public void maTuDong(){
         ArrayList<String> danhSachMaKH = getDSID();
         String newMaDG = tangMaKhachHang(danhSachMaKH);
-        txtID.setText(newMaDG);
+        txtMaKH.setText(newMaDG);
     }
     
     public void trangThaiBanDau(){
+        maTuDong();
         txtTen.setText("");
         jDateNamSinh.setDate(null);
         txtDiaChi.setText("");
@@ -107,11 +108,11 @@ public class QLKH_GUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tbKH = new javax.swing.JTable();
+        tbKhachHang = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtSDT = new javax.swing.JTextField();
-        txtID = new javax.swing.JTextField();
+        txtMaKH = new javax.swing.JTextField();
         txtTen = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtGiaTriHD = new javax.swing.JTextField();
@@ -129,10 +130,10 @@ public class QLKH_GUI extends javax.swing.JFrame {
         btnTim = new javax.swing.JButton();
         txtTim = new javax.swing.JTextField();
         cbbTim = new javax.swing.JComboBox<>();
-        cbbSapXep = new javax.swing.JComboBox<>();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
+        btnCapNhat = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -157,7 +158,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
         jLabel1.setText("QUẢN LÍ KHÁCH HÀNG");
 
-        tbKH.setModel(new javax.swing.table.DefaultTableModel(
+        tbKhachHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -168,22 +169,27 @@ public class QLKH_GUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tbKH);
+        tbKhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbKhachHangMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbKhachHang);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Địa chỉ");
 
-        txtID.setEditable(false);
-        txtID.addActionListener(new java.awt.event.ActionListener() {
+        txtMaKH.setEditable(false);
+        txtMaKH.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIDActionPerformed(evt);
+                txtMaKHActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setText("ID");
+        jLabel2.setText("Mã khách hàng");
 
         txtGiaTriHD.setEditable(false);
 
@@ -231,14 +237,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
             }
         });
 
-        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã sản phẩm", "Tên sản phẩm ", "Mã nhà cung cấp" }));
-
-        cbbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giá bán", "Giá Nhập", "Bảo Hành" }));
-        cbbSapXep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbSapXepActionPerformed(evt);
-            }
-        });
+        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã khách hàng", "Tên khách hàng " }));
 
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 102, 102));
@@ -261,13 +260,27 @@ public class QLKH_GUI extends javax.swing.JFrame {
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(0, 102, 102));
         btnXoa.setText("XOÁ");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
+
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCapNhat.setForeground(new java.awt.Color(0, 102, 102));
+        btnCapNhat.setText("CẬP NHẬT");
+        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCapNhatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,8 +295,8 @@ public class QLKH_GUI extends javax.swing.JFrame {
                         .addComponent(rbtNam)
                         .addGap(18, 18, 18)
                         .addComponent(rbtNu))
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                    .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,22 +308,22 @@ public class QLKH_GUI extends javax.swing.JFrame {
                     .addComponent(txtSDT)
                     .addComponent(txtSLHD)
                     .addComponent(txtGiaTriHD, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(btnTim)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
+                .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -320,7 +333,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
@@ -350,7 +363,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
                     .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
 
@@ -393,9 +406,9 @@ public class QLKH_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+    private void txtMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIDActionPerformed
+    }//GEN-LAST:event_txtMaKHActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
@@ -406,49 +419,34 @@ public class QLKH_GUI extends javax.swing.JFrame {
         }else{
             String selectedValue = cbbTim.getSelectedItem().toString();
             switch (selectedValue) {
-                case "Mã sản phẩm":
-                String maSPCanTim = txtTim.getText();
-                DTOSanPham ketQuaMaSP = BLLsp.BLLtimtheomasp(maSPCanTim);
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    Object[] row = {ketQuaMaSP.getMaSanPham(),ketQuaMaSP.getTenSanPham(),ketQuaMaSP.getGiaBan(),ketQuaMaSP.getGiaNhap(),ketQuaMaSP.getSoLuong(),ketQuaMaSP.getMaNCC(),ketQuaMaSP.getBaoHanh(),ketQuaMaSP.getImg()};
-                    model.addRow(row);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã sản phẩm");
-                }
-                break;
+                case "Mã khách hàng":
+                    String maKHCanTim = txtTim.getText();
+                    DTOKhachHang ketQuaMaKH = BLLkh.BLLtim(maKHCanTim);
+                    if (ketQuaMaKH != null){
+                        model = (DefaultTableModel) tbKhachHang.getModel();
+                        model.setRowCount(0);
+                        Object[] row = {ketQuaMaKH.getMaKH(),ketQuaMaKH.getTen(),ketQuaMaKH.getSex(),ketQuaMaKH.getNgaySinh(),ketQuaMaKH.getDiaChi(),ketQuaMaKH.getSDT()};
+                        model.addRow(row);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng");
+                    }
+                    break;
                 case "Tên sản phẩm":
-                String tenSachCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-                if (ketQuaTenSach.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTenSach){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
+                    String tenSachCanTim = txtTim.getText();
+                    ArrayList<DTOKhachHang> ketQuaTenSach = BLLkh.BLLtimtheoten(tenSachCanTim);
+                    if (ketQuaTenSach.size() > 0){
+                        model = (DefaultTableModel) tbKhachHang.getModel();
+                        model.setRowCount(0);
+                        for(DTOKhachHang s : ketQuaTenSach){
+                            Object[] row = {s.getMaKH(),s.getTen(),s.getSex(),s.getNgaySinh(),s.getDiaChi(),s.getSDT()};
+                            model.addRow(row);
+                        }
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
-                }
-                break;
-                case "Mã nhà cung cấp":
-                String theLoaiCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-                if (ketQuaTL.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTL){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getImg()};
-                        model.addRow(row);
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã nhà cung cấp");
-                }
-                break;
+                    break;
                 default:
                 throw new AssertionError();
             }
@@ -464,149 +462,62 @@ public class QLKH_GUI extends javax.swing.JFrame {
         int selectedValue = cbbTim.getSelectedIndex();
         switch (selectedValue) {
             case 0:
-            String maSachCanTim = txtTim.getText();
-            DTOSanPham ketQuaMaSach = BLLsp.BLLtimtheomasp(maSachCanTim);
-            if (ketQuaMaSach != null){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                Object[] row = {ketQuaMaSach.getMaSanPham(),ketQuaMaSach.getTenSanPham(),ketQuaMaSach.getGiaBan(),ketQuaMaSach.getGiaNhap(),ketQuaMaSach.getSoLuong(),ketQuaMaSach.getMaNCC(),ketQuaMaSach.getBaoHanh(),ketQuaMaSach.getImg()};
-                model.addRow(row);
-            }else{
-                loadSP();
-            }
-            break;
+                String maSachCanTim = txtTim.getText();
+                DTOKhachHang ketQuaMaKH = BLLkh.BLLtim(maSachCanTim);
+                if (ketQuaMaKH != null){
+                    model = (DefaultTableModel) tbKhachHang.getModel();
+                    model.setRowCount(0);
+                    Object[] row = {ketQuaMaKH.getMaKH(),ketQuaMaKH.getTen(),ketQuaMaKH.getSex(),ketQuaMaKH.getNgaySinh(),ketQuaMaKH.getDiaChi(),ketQuaMaKH.getSDT()};
+                    model.addRow(row);
+                }else{
+                    loadKhachHang();
+                }
+                break;
             case 1:
-            String tenSachCanTim = txtTim.getText().toString();
-            ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-            for(DTOSanPham sp : ketQuaTenSach){
-                System.out.println(sp.getMaSanPham());
-            }
-            if (!ketQuaTenSach.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTenSach){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                String tenSachCanTim = txtTim.getText().toString();
+                ArrayList<DTOKhachHang> ketQuaTenSach = BLLkh.BLLtimtheoten(tenSachCanTim);
+//                for(DTOKhachHang sp : ketQuaTenSach){
+//                    System.out.println(sp.getMaKH());
+//                }
+                if (!ketQuaTenSach.isEmpty()){
+                    model = (DefaultTableModel) tbKhachHang.getModel();
+                    model.setRowCount(0);
+                    for(DTOKhachHang s : ketQuaTenSach){
+                        Object[] row = {s.getMaKH(),s.getTen(),s.getSex(),s.getNgaySinh(),s.getDiaChi(),s.getSDT()};
+                        model.addRow(row);
+                    }
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
-            case 2:
-            String theLoaiCanTim = txtTim.getText();
-            ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-            if (!ketQuaTL.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTL){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                else{
+                    loadKhachHang();
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
+                break;
             default:
             throw new AssertionError();
         }
     }//GEN-LAST:event_txtTimKeyReleased
 
-    private void cbbSapXepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSapXepActionPerformed
-        // TODO add your handling code here:
-        if(cbbSapXep.getSelectedItem() == ""){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn sắp xếp");
-        }else{
-            int selectedValue = cbbSapXep.getSelectedIndex();
-            ArrayList<DTOSanPham> ketQuaMaSP = BLLsp.BLLgetDL();
-            switch (selectedValue) {
-                case 0:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaBan() > ketQuaMaSP.get(i  + 1).getGiaBan()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 1:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaNhap() > ketQuaMaSP.get(i  + 1).getGiaNhap()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 2:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getBaoHanh() > ketQuaMaSP.get(i  + 1).getBaoHanh()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                default:
-                throw new AssertionError();
-            }
-        }
-    }//GEN-LAST:event_cbbSapXepActionPerformed
-
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         try{
-            if(txtID.getText().trim().equals("") ||
+            if(txtMaKH.getText().trim().equals("") ||
                 txtTen.getText().trim().equals("") ||
                 txtDiaChi.getText().trim().equals("") ||
                 txtSDT.getText().trim().equals("")||
-                //txtAnh.getText().trim().equals("")||
-                jDateNamSinh.getDate().equals(""))
+                jDateNamSinh.getDate().equals("")){
 
             JOptionPane.showMessageDialog(null,"Không được để trống thông tin, vui lòng nhập lại thông tin");
+            }else if(rbtNam.isSelected() == false && rbtNu.isSelected() == false){
+                JOptionPane.showMessageDialog(null,"Vui lòng chọn giới tính");
+            }
             else{
                 DTOKhachHang kh = new DTOKhachHang();
-                kh.setMaKH(txtID.getText());
+                kh.setMaKH(txtMaKH.getText());
                 kh.setTen(txtTen.getText());
+                if(rbtNam.isSelected()){
+                    kh.setSex("Nam");
+                }
+                else{
+                    kh.setSex("Nữ");
+                }
                 kh.setDiaChi(txtDiaChi.getText());
                 kh.setSDT(txtSDT.getText());
                 Date d = jDateNamSinh.getDate();
@@ -625,7 +536,96 @@ public class QLKH_GUI extends javax.swing.JFrame {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
+        try {
+            int i = tbKhachHang.getSelectedRow(); 
+            DTOKhachHang sp = new DTOKhachHang();
+            if (i>=0){
+                if(txtMaKH.getText().trim().equals("") ||
+                    txtTen.getText().trim().equals("") ||
+                    txtDiaChi.getText().trim().equals("") ||
+                    jDateNamSinh.getDate().equals("")||
+                    txtSDT.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Không được để trống thông tin khách hàng!");
+                }
+                else if(rbtNam.isSelected() == true && rbtNu.isSelected() == true){
+                    JOptionPane.showMessageDialog(null,"Vui lòng chọn giới tính!");
+                }
+                else{
+                    sp.setMaKH(txtMaKH.getText()); 
+                    sp.setTen(txtTen.getText());
+                    if(rbtNam.isSelected()){
+                        sp.setSex("Nam");
+                    }else{
+                        sp.setSex("Nu");
+                    }
+                    sp.setDiaChi(txtDiaChi.getText());
+                    sp.setSDT(txtSDT.getText());
+                    Date d = jDateNamSinh.getDate();
+                    sp.setNgaySinh((java.sql.Date) d);
+                    JOptionPane.showMessageDialog(this, BLLkh.BLLsua(sp));
+                    loadKhachHang();
+                    trangThaiBanDau();
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Hãy chọn 1 dòng để sửa");
+            }
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(this, "Lỗi");
+            JOptionPane.showMessageDialog(this, e);
+            System.out.println(e);
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void tbKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbKhachHangMouseClicked
+        // TODO add your handling code here:
+                try{
+            int i = tbKhachHang.getSelectedRow();
+            if(i >= 0){
+                rbtNam.setSelected(false);
+                rbtNu.setSelected(false);
+                txtMaKH.setText(model.getValueAt(i, 0).toString());
+                txtTen.setText(model.getValueAt(i, 1).toString());
+                System.out.println(model.getValueAt(i, 2).toString());
+                if(model.getValueAt(i, 2).toString().equals("Nam")){
+                    rbtNam.setSelected(true);
+                }else{
+                    rbtNu.setSelected(true);
+                }
+                String dateString = model.getValueAt(i, 3).toString();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = dateFormat.parse(dateString);
+                jDateNamSinh.setDate(date);
+                txtDiaChi.setText(model.getValueAt(i, 4).toString());
+                txtSDT.setText(model.getValueAt(i, 5).toString());
+            }
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_tbKhachHangMouseClicked
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        int i = tbKhachHang.getSelectedRow();
+        String masp;
+        if(i >= 0){
+            masp = model.getValueAt(i, 0).toString();
+            JOptionPane.showMessageDialog(this,BLLkh.BLLxoa(masp));
+            loadKhachHang();
+            trangThaiBanDau();
+        }else{
+            JOptionPane.showMessageDialog(this, "Hãy chọn 1 dòng để xóa");
+        } 
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
+        // TODO add your handling code here:
+        maTuDong();
+        txtTen.setText("");
+        jDateNamSinh.setDate(null);
+        txtDiaChi.setText("");
+        txtSDT.setText("");
+    }//GEN-LAST:event_btnCapNhatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -662,11 +662,11 @@ public class QLKH_GUI extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTim;
     private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> cbbSapXep;
     private javax.swing.JComboBox<String> cbbTim;
     private com.toedter.calendar.JDateChooser jDateNamSinh;
     private javax.swing.JLabel jLabel1;
@@ -685,10 +685,10 @@ public class QLKH_GUI extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton rbtNam;
     private javax.swing.JRadioButton rbtNu;
-    private javax.swing.JTable tbKH;
+    private javax.swing.JTable tbKhachHang;
     private javax.swing.JTextField txtDiaChi;
     private javax.swing.JTextField txtGiaTriHD;
-    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtMaKH;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtSLHD;
     private javax.swing.JTextField txtTen;
