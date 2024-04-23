@@ -29,7 +29,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jpQLPN = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbPN = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -39,15 +39,14 @@ public class QLPN_GUI extends javax.swing.JFrame {
         txtMaNV = new javax.swing.JTextField();
         txtMaNCC = new javax.swing.JTextField();
         txtTongGia = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
+        btnChiTiet = new javax.swing.JButton();
         jDateNgayNhap = new com.toedter.calendar.JDateChooser();
         btnTim = new javax.swing.JButton();
         txtTim = new javax.swing.JTextField();
         cbbTim = new javax.swing.JComboBox<>();
-        cbbSapXep = new javax.swing.JComboBox<>();
         jpCTPN = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -67,7 +66,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
 
         jpQLPN.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbPN.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -78,7 +77,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
                 "STT", "Mã phiếu nhập", "Mã nhà cung cấp", "Mã nhân viên", "Ngày nhập", "Tổng giá"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbPN);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Mã phiếu nhập");
@@ -113,24 +112,24 @@ public class QLPN_GUI extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 102, 102));
-        jButton1.setText("THÊM");
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(0, 102, 102));
+        btnThem.setText("THÊM");
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 102, 102));
-        jButton2.setText("SỬA");
+        btnSua.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(0, 102, 102));
+        btnSua.setText("SỬA");
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 102, 102));
-        jButton3.setText("XOÁ");
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(0, 102, 102));
+        btnXoa.setText("XOÁ");
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 102, 102));
-        jButton4.setText("CHI TIẾT");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnChiTiet.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnChiTiet.setForeground(new java.awt.Color(0, 102, 102));
+        btnChiTiet.setText("CHI TIẾT");
+        btnChiTiet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnChiTietActionPerformed(evt);
             }
         });
 
@@ -154,14 +153,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
             }
         });
 
-        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã sản phẩm", "Tên sản phẩm ", "Mã nhà cung cấp" }));
-
-        cbbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giá bán", "Giá Nhập", "Bảo Hành" }));
-        cbbSapXep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbSapXepActionPerformed(evt);
-            }
-        });
+        cbbTim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã phiếu nhập", "Mã nhân viên", "Mã nhà cung cấp" }));
 
         javax.swing.GroupLayout jpQLPNLayout = new javax.swing.GroupLayout(jpQLPN);
         jpQLPN.setLayout(jpQLPNLayout);
@@ -180,7 +172,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpQLPNLayout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jpQLPNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpQLPNLayout.createSequentialGroup()
@@ -192,11 +184,11 @@ public class QLPN_GUI extends javax.swing.JFrame {
                             .addComponent(txtTongGia, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
                             .addComponent(jDateNgayNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jpQLPNLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(jpQLPNLayout.createSequentialGroup()
                 .addContainerGap()
@@ -205,8 +197,6 @@ public class QLPN_GUI extends javax.swing.JFrame {
                 .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpQLPNLayout.setVerticalGroup(
@@ -237,16 +227,15 @@ public class QLPN_GUI extends javax.swing.JFrame {
                             .addComponent(txtTongGia, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                         .addGroup(jpQLPNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpQLPNLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -387,10 +376,10 @@ public class QLPN_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnChiTietActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChiTietActionPerformed
         // TODO add your handling code here:
         jTabbedPane1.setSelectedIndex(1);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnChiTietActionPerformed
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
@@ -508,86 +497,6 @@ public class QLPN_GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtTimKeyReleased
 
-    private void cbbSapXepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSapXepActionPerformed
-        // TODO add your handling code here:
-        if(cbbSapXep.getSelectedItem() == ""){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn sắp xếp");
-        }else{
-            int selectedValue = cbbSapXep.getSelectedIndex();
-            ArrayList<DTOSanPham> ketQuaMaSP = BLLsp.BLLgetDL();
-            switch (selectedValue) {
-                case 0:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaBan() > ketQuaMaSP.get(i  + 1).getGiaBan()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 1:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getGiaNhap() > ketQuaMaSP.get(i  + 1).getGiaNhap()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                case 2:
-                for(int j = 0; j < ketQuaMaSP.size() - 1; j ++){
-                    for(int i = 0; i < ketQuaMaSP.size() - j - 1; i ++){
-                        if(ketQuaMaSP.get(i).getBaoHanh() > ketQuaMaSP.get(i  + 1).getBaoHanh()){
-                            DTOSanPham temp = ketQuaMaSP.get(i);
-                            ketQuaMaSP.set(i, ketQuaMaSP.get(i + 1));
-                            ketQuaMaSP.set(i + 1, temp);
-                        }
-                    }
-                }
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaMaSP){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Lỗiiii");
-                }
-                break;
-                default:
-                throw new AssertionError();
-            }
-        }
-    }//GEN-LAST:event_cbbSapXepActionPerformed
-
     private void txtMaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaNVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaNVActionPerformed
@@ -636,13 +545,12 @@ public class QLPN_GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChiTiet;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTim;
-    private javax.swing.JComboBox<String> cbbSapXep;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox<String> cbbTim;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private com.toedter.calendar.JDateChooser jDateNgayNhap;
@@ -659,7 +567,6 @@ public class QLPN_GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -667,6 +574,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     private javax.swing.JPanel jpCTPN;
     private javax.swing.JPanel jpQLPN;
+    private javax.swing.JTable tbPN;
     private javax.swing.JTextField txtMaNCC;
     private javax.swing.JTextField txtMaNV;
     private javax.swing.JTextField txtMaPN;
