@@ -4,15 +4,14 @@ import java.sql.Date;
 
 public class DTONhanVien extends ConNguoi{
 
-    String MaNV, vitri, hinhanh, MaCN;
+    String MaNV, vitri, hinhanh, MaCN, trangThai;
     float luong;
-    boolean trangThai;
     
     public DTONhanVien() {
         super();
     }
     
-    public DTONhanVien(String MaNV, String Ten, String sex, Date ngaySinh, String DiaChi, String SDT, float luong, String vitri, boolean trangThai, String hinhanh, String MaCN) {
+    public DTONhanVien(String MaNV, String Ten, String sex, Date ngaySinh, String DiaChi, String SDT, float luong, String vitri, String trangThai, String hinhanh, String MaCN) {
         super(Ten, DiaChi, SDT, sex, ngaySinh);
         this.MaNV = MaNV;
         this.luong = luong;
@@ -38,11 +37,11 @@ public class DTONhanVien extends ConNguoi{
         this.luong = luong;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 
-    public boolean getTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 

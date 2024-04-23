@@ -3,7 +3,6 @@ package DAL;
 import DTO.DTONhanVien;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,8 +37,6 @@ public class DALNhanVien{
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch (Exception ex) {
             ex.printStackTrace();
@@ -71,7 +68,7 @@ public class DALNhanVien{
                 nv.setDiaChi(rs.getString("DIA_CHI"));
                 nv.setSDT(rs.getString("SO_DIEN_THOAI"));
                 nv.setLuong(rs.getFloat("LUONG"));
-                nv.setTrangThai(rs.getBoolean("TRANG_THAI"));
+                nv.setTrangThai(rs.getString("TRANG_THAI"));
                 nv.setVitri(rs.getString("VI_TRI"));
                 nv.setHinhanh(rs.getString("HINH_ANH"));
                 nv.setMaCN(rs.getString("CHI_NHANH"));
@@ -99,7 +96,7 @@ public class DALNhanVien{
         stmt.setFloat(9, nv.getLuong());
         stmt.setDate(5, nv.getNgaySinh());
         stmt.setString(7, nv.getVitri());
-        stmt.setBoolean(10, nv.getTrangThai());
+        stmt.setString(10, nv.getTrangThai());
         stmt.setString(6, nv.getHinhanh());
         stmt.setString(11, nv.getMaCN());
         if (stmt.executeUpdate()>=1)
@@ -162,7 +159,7 @@ public class DALNhanVien{
                     String sex = rs.getString("GIOI_TINH");
                     float luong = rs.getFloat("LUONG");
                     Date NgaySinh = rs.getDate("NAM_SINH");
-                    Boolean trangthai = rs.getBoolean("TRANG_THAI");
+                    String trangthai = rs.getString("TRANG_THAI");
                     String vitri = rs.getString("VI_TRI");
                     String hinhanh = rs.getString("HINH_ANH");
                     String macn = rs.getString("CHI_NHANH");
@@ -192,7 +189,7 @@ public class DALNhanVien{
                 p.setFloat(6, nv.getLuong());
                 p.setDate(7, nv.getNgaySinh());
                 p.setString(8, nv.getVitri());
-                p.setBoolean(9, nv.getTrangThai());
+                p.setString(9, nv.getTrangThai());
                 p.setString(10, nv.getHinhanh());
                 p.setString(11, nv.getMaCN());
                 p.setString(12, nv.getMaNV());
