@@ -7,8 +7,10 @@ package GUI;
 import BLL.BLLKhuyenMai;
 import DAL.DALKhuyenMai;
 import DTO.DTOKhuyenMai;
-import DTO.DTOSanPham;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,16 +29,83 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
     public KhuyenMai_GUI() {
         initComponents();
         list = new DALKhuyenMai().getallkmlist();
-        model = (DefaultTableModel) jTable1.getModel();
-        model.setColumnIdentifiers(new Object[]{"Mã khuyến mãi","Tên khuyến mãi","Loại khuyến mãi","Trị giá", "Thời gian bắt đầu", "Thời gian kết thúc"});
-        showTable();
+        loadKM();
+        maTuDong();
+//        model = (DefaultTableModel) jTable1.getModel();
+//        model.setColumnIdentifiers(new Object[]{"Mã khuyến mãi","Tên khuyến mãi","Loại khuyến mãi","Trị giá", "Thời gian bắt đầu", "Thời gian kết thúc"});
+//        showTable();
         //jTable1.setEnabled(false);
     }
     
-    public void showTable(){
-        for(DTOKhuyenMai km : list){
-            model.addRow(new Object[]{km.getMaKhuyenMai(), km.getTen(), km.getLoai(), km.getGiaTri(), km.getNgayBD(), km.getNgayKT()});
+//    public void showTable(){
+//        for(DTOKhuyenMai km : list){
+//            model.addRow(new Object[]{km.getMaKhuyenMai(), km.getTen(), km.getLoai(), km.getGiaTri(), km.getNgayBD(), km.getNgayKT()});
+//            //System.out.println(km.getTen());
+//        }
+//    }
+    
+        public void loadKM(){
+        model = new DefaultTableModel();
+        model.addColumn("Mã khuyến mãi");
+        model.addColumn("Tên khuyến mãi");
+        model.addColumn("Loại");
+        model.addColumn("Giá Trị");
+        model.addColumn("Thời gian bắt đầu");
+        model.addColumn("Thời gian kết thúc");
+        jTable1.setModel(model);
+        ArrayList<DTOKhuyenMai> arr = new ArrayList<DTOKhuyenMai>();
+        arr = BLLkm.BLLgetDL();
+        for (int i = 0; i < arr.size(); i++){
+            DTOKhuyenMai sp = arr.get(i);
+            String MaSP = sp.getMaKhuyenMai();
+            String TenSP = sp.getTen();
+            String GiaBan = sp.getLoai();
+            float GiaNhap = sp.getGiaTri();
+            Date SoLuong = sp.getNgayBD();
+            Date MaNCC = sp.getNgayKT();
+            Object[] row = {MaSP, TenSP, GiaBan, GiaNhap, SoLuong, MaNCC};
+            model.addRow(row);
         }
+    }
+        
+    public static String tangMaSP(ArrayList<String> danhSachMaSP) {
+        String maxMaSP = ""; 
+        for (String maSP : danhSachMaSP) {
+            if (maSP.compareTo(maxMaSP) > 0) {
+                maxMaSP = maSP;
+            }
+        }
+        if (maxMaSP == null || maxMaSP.isEmpty()) {
+            return "SP001"; // Giả sử mã đầu tiên là "SP001"
+        }
+        // Tăng mã 
+        String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSP.substring(4));
+        suffix++;
+        // Trả về mã mới
+        return prefix + String.format("%d", suffix);
+    }
+    
+    public ArrayList<String> laydsma(){
+        ArrayList<String> dsma = new ArrayList<String>();
+        for(DTOKhuyenMai sp : BLLkm.BLLgetDL()){
+            dsma.add(sp.getMaKhuyenMai());
+        }
+        return dsma;
+    }
+    
+    public void maTuDong(){
+        String newMaSP = tangMaSP(laydsma());
+        txtMaKM.setText(newMaSP);
+    }
+    
+    public void trangThaiBanDau(){
+        txtTenKM.setText("");
+        jComboBox1.setSelectedItem("");
+        txtGiaTri.setText("");
+        jdTGBD.setDate(null);
+        jdTGKT.setDate(null);
+        maTuDong();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,14 +130,15 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
         txtGiaTri = new javax.swing.JTextField();
         btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
-        btnXoa = new javax.swing.JButton();
+        btnCapNhat = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jdTGBD = new com.toedter.calendar.JDateChooser();
         jdTGKT = new com.toedter.calendar.JDateChooser();
         cbbTim = new javax.swing.JComboBox<>();
         btnTim = new javax.swing.JButton();
         txtTim = new javax.swing.JTextField();
-        cbbLoc = new javax.swing.JComboBox<>();
+        cbbSapXep = new javax.swing.JComboBox<>();
+        btnXoa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +177,8 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Thời gian kết thúc");
 
+        txtMaKM.setEditable(false);
+
         txtTenKM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTenKMActionPerformed(evt);
@@ -137,12 +209,12 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
             }
         });
 
-        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnXoa.setForeground(new java.awt.Color(0, 102, 102));
-        btnXoa.setText("XOÁ");
-        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+        btnCapNhat.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCapNhat.setForeground(new java.awt.Color(0, 102, 102));
+        btnCapNhat.setText("CẬP NHẬT");
+        btnCapNhat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnXoaActionPerformed(evt);
+                btnCapNhatActionPerformed(evt);
             }
         });
 
@@ -171,14 +243,28 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
             }
         });
 
-        cbbLoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Thời gian bắt đầu", "Thời gian kết thúc" }));
+        cbbSapXep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Còn hạn", "Hết hạn" }));
+        cbbSapXep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbSapXepActionPerformed(evt);
+            }
+        });
+
+        btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(0, 102, 102));
+        btnXoa.setText("XOÁ");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,20 +273,27 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtGiaTri, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-                    .addComponent(txtTenKM)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jdTGBD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jdTGKT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtMaKM))
-                .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCapNhat)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 26, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtGiaTri, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                            .addComponent(txtTenKM)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jdTGBD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jdTGKT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMaKM))
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnTim)
@@ -209,7 +302,7 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(cbbLoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbbSapXep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -248,6 +341,7 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCapNhat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(17, 17, 17)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -255,7 +349,7 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
                         .addComponent(btnTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cbbTim, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cbbLoc))
+                    .addComponent(cbbSapXep))
                 .addContainerGap())
         );
 
@@ -273,28 +367,11 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+    private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatActionPerformed
         // TODO add your handling code here:
-    DTOKhuyenMai km = new DTOKhuyenMai();
-    int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-    km.setMaKhuyenMai(txtMaKM.getText());
-    int option = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa khuyến mãi?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-    if (option == JOptionPane.YES_OPTION) {
-        BLLKhuyenMai bllKhuyenMai = new BLLKhuyenMai();
-        String result = bllKhuyenMai.BLLxoa(km);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.removeRow(selectedRow);
-        jTable1.setModel(model);
-        JOptionPane.showMessageDialog(null, result, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        // Hiển thị thông báo nếu người dùng chọn "No"
-        JOptionPane.showMessageDialog(null, "Đã hủy xóa khuyến mãi.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-    }
-    }//GEN-LAST:event_btnXoaActionPerformed
+        trangThaiBanDau();
+        loadKM();
+    }//GEN-LAST:event_btnCapNhatActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         DTOKhuyenMai km = new DTOKhuyenMai();
@@ -408,48 +485,34 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
             String selectedValue = cbbTim.getSelectedItem().toString();
             switch (selectedValue) {
                 case "Mã khuyến mãi":
-                String maSPCanTim = txtTim.getText();
-                DTOKhuyenMai ketQuaMaSP = BLLkm.BLLtim(maSPCanTim);
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) jTable1.getModel();
-                    model.setRowCount(0);
-                    Object[] row = {ketQuaMaSP.getMaKhuyenMai(),ketQuaMaSP.getTen(),ketQuaMaSP.get(),ketQuaMaSP.getGiaNhap(),ketQuaMaSP.getSoLuong(),ketQuaMaSP.getMaNCC(),ketQuaMaSP.getBaoHanh(),ketQuaMaSP.getImg()};
-                    model.addRow(row);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã sản phẩm");
-                }
-                break;
+                    String maSPCanTim = txtTim.getText();
+                    DTOKhuyenMai ketQuaMaSP = BLLkm.BLLtim(maSPCanTim);
+                    if (ketQuaMaSP != null){
+                        model = (DefaultTableModel) jTable1.getModel();
+                        model.setRowCount(0);
+                        Object[] row = {ketQuaMaSP.getMaKhuyenMai(),ketQuaMaSP.getTen(),ketQuaMaSP.getLoai(),ketQuaMaSP.getGiaTri(),ketQuaMaSP.getNgayBD(),ketQuaMaSP.getNgayKT()};
+                        model.addRow(row);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi");
+                    }
+                    break;
                 case "Tên khuyến mãi":
-                String tenSachCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-                if (ketQuaTenSach.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTenSach){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
+                    String tenSachCanTim = txtTim.getText();
+                    ArrayList<DTOKhuyenMai> ketQuaTenSach = BLLkm.BLLtimtheoten(tenSachCanTim);
+                    if (ketQuaTenSach.size() > 0){
+                        model = (DefaultTableModel) jTable1.getModel();
+                        model.setRowCount(0);
+                        for(DTOKhuyenMai s : ketQuaTenSach){
+                            Object[] row = {s.getMaKhuyenMai(),s.getTen(),s.getLoai(),s.getGiaTri(),s.getNgayBD(),s.getNgayKT()};
+                            model.addRow(row);
+                        }
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
-                }
-                break;
-                case "Mã nhà cung cấp":
-                String theLoaiCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-                if (ketQuaTL.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTL){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getImg()};
-                        model.addRow(row);
+                    else{
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi");
                     }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã nhà cung cấp");
-                }
-                break;
+                    break;
+                
                 default:
                 throw new AssertionError();
             }
@@ -465,59 +528,117 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
         int selectedValue = cbbTim.getSelectedIndex();
         switch (selectedValue) {
             case 0:
-            String maSachCanTim = txtTim.getText();
-            DTOSanPham ketQuaMaSach = BLLsp.BLLtimtheomasp(maSachCanTim);
-            if (ketQuaMaSach != null){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                Object[] row = {ketQuaMaSach.getMaSanPham(),ketQuaMaSach.getTenSanPham(),ketQuaMaSach.getGiaBan(),ketQuaMaSach.getGiaNhap(),ketQuaMaSach.getSoLuong(),ketQuaMaSach.getMaNCC(),ketQuaMaSach.getBaoHanh(),ketQuaMaSach.getImg()};
-                model.addRow(row);
-            }else{
-                loadSP();
-            }
-            break;
+                String maSachCanTim = txtTim.getText();
+                DTOKhuyenMai ketQuaMaSach = BLLkm.BLLtim(maSachCanTim);
+                if (ketQuaMaSach != null){
+                    model = (DefaultTableModel) jTable1.getModel();
+                    model.setRowCount(0);
+                    Object[] row = {ketQuaMaSach.getMaKhuyenMai(),ketQuaMaSach.getTen(),ketQuaMaSach.getLoai(),ketQuaMaSach.getGiaTri(),ketQuaMaSach.getNgayBD(),ketQuaMaSach.getNgayKT()};
+                    model.addRow(row);
+                }else{
+                    loadKM();
+                }
+                break;
             case 1:
-            String tenSachCanTim = txtTim.getText().toString();
-            ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-            for(DTOSanPham sp : ketQuaTenSach){
-                System.out.println(sp.getMaSanPham());
-            }
-            if (!ketQuaTenSach.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTenSach){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                String tenSachCanTim = txtTim.getText();
+                ArrayList<DTOKhuyenMai> ketQuaTenSach = BLLkm.BLLtimtheoten(tenSachCanTim);
+                if (!ketQuaTenSach.isEmpty()){
+                    model = (DefaultTableModel) jTable1.getModel();
+                    model.setRowCount(0);
+                    for(DTOKhuyenMai s : ketQuaTenSach){
+                        Object[] row = {s.getMaKhuyenMai(),s.getTen(),s.getLoai(),s.getGiaTri(),s.getNgayBD(),s.getNgayKT()};
+                        model.addRow(row);
+                    }
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
-            case 2:
-            String theLoaiCanTim = txtTim.getText();
-            ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-            if (!ketQuaTL.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTL){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
+                else{
+                    loadKM();
                 }
-            }
-            else{
-                loadSP();
-            }
-            break;
+                break;
             default:
             throw new AssertionError();
         }
     }//GEN-LAST:event_txtTimKeyReleased
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        DTOKhuyenMai km = new DTOKhuyenMai();
+    int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    km.setMaKhuyenMai(txtMaKM.getText());
+    int option = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa khuyến mãi?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    if (option == JOptionPane.YES_OPTION) {
+        BLLKhuyenMai bllKhuyenMai = new BLLKhuyenMai();
+        String result = bllKhuyenMai.BLLxoa(km);
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.removeRow(selectedRow);
+        jTable1.setModel(model);
+        JOptionPane.showMessageDialog(null, result, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        // Hiển thị thông báo nếu người dùng chọn "No"
+        JOptionPane.showMessageDialog(null, "Đã hủy xóa khuyến mãi.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void cbbSapXepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSapXepActionPerformed
+        // TODO add your handling code here:
+        if(cbbSapXep.getSelectedItem() == ""){
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn sắp xếp");
+        }else{
+            int selectedValue = cbbSapXep.getSelectedIndex();
+            ArrayList<DTOKhuyenMai> ketQuaMaSP = BLLkm.BLLgetDL();
+            ArrayList<DTOKhuyenMai> ketQua = new ArrayList<DTOKhuyenMai>();
+            Date d = new Date();
+            System.out.print(d);
+            switch (selectedValue) {
+                case 0:
+                    for(DTOKhuyenMai km: ketQuaMaSP){
+                        if(km.getNgayKT().after(d)){
+                            ketQua.add(km);
+                        }
+                    }
+                    if (ketQuaMaSP != null){
+                        model = (DefaultTableModel) jTable1.getModel();
+                        model.setRowCount(0);
+                        for(DTOKhuyenMai s : ketQua){
+                            Object[] row = {s.getMaKhuyenMai(),s.getTen(),s.getLoai(),s.getGiaTri(),s.getNgayBD(),s.getNgayKT()};
+                            model.addRow(row);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Lỗiiii");
+                    }
+                    break;
+                case 1:
+                    for(DTOKhuyenMai km: ketQuaMaSP){
+                        if(d.after(km.getNgayKT())){
+                            ketQua.add(km);
+                        }
+                    }
+                    if (ketQuaMaSP != null){
+                        model = (DefaultTableModel) jTable1.getModel();
+                        model.setRowCount(0);
+                        for(DTOKhuyenMai s : ketQua){
+                            Object[] row = {s.getMaKhuyenMai(),s.getTen(),s.getLoai(),s.getGiaTri(),s.getNgayBD(),s.getNgayKT()};
+                            model.addRow(row);
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Lỗiiii");
+                    }
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+    }//GEN-LAST:event_cbbSapXepActionPerformed
     int current = 0;
     public void display(int i){
         DTOKhuyenMai km = list.get(i);    
         txtMaKM.setText(km.maKhuyenMai);
-        txtTenKM.setText(km.tenKM);
+        txtTenKM.setText(km.ten);
         jComboBox1.setSelectedItem(km.loai);
         txtGiaTri.setText(String.valueOf(km.giaTri));
         jdTGBD.setDate(km.ngayBD);
@@ -561,11 +682,12 @@ public class KhuyenMai_GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCapNhat;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTim;
     private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> cbbLoc;
+    private javax.swing.JComboBox<String> cbbSapXep;
     private javax.swing.JComboBox<String> cbbTim;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

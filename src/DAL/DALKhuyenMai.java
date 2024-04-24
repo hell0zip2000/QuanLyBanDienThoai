@@ -55,11 +55,11 @@ public class DALKhuyenMai {
                 while(rs.next()){
                     DTOKhuyenMai km = new DTOKhuyenMai();
                     km.setMaKhuyenMai(rs.getString("MA_KHUYEN_MAI"));
+                    km.setTen(rs.getString("TEN"));
                     km.setNgayBD(rs.getDate("THOI_GIAN_BAT_DAU"));
                     km.setNgayKT(rs.getDate("THOI_GIAN_KET_THUC"));
                     km.setLoai(rs.getString("LOAI"));
                     km.setGiaTri(rs.getFloat("GIA_TRI"));
-                    km.setTen(rs.getString("TEN"));
                     kmList.add(km);
                 }
             }catch(SQLException ex){
@@ -197,7 +197,8 @@ public class DALKhuyenMai {
                     Date img = rs.getDate("THOI_GIAN_KET_THUC");
                     String giaban = rs.getString("LOAI");
                     float gianhap = rs.getFloat("GIA_TRI");
-                    DTOKhuyenMai sp = new DTOKhuyenMai(ma,soluong,img,giaban,gianhap,ten);
+                    String tenKM = rs.getString("TEN");
+                    DTOKhuyenMai sp = new DTOKhuyenMai(ma,soluong,img,giaban,gianhap,tenKM);
                     kmList.add(sp);
                 }
             }

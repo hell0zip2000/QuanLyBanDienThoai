@@ -4,8 +4,8 @@ import java.sql.Date;
 
 public class DTOKhuyenMai {
     public String maKhuyenMai, ten, loai;
-    Date ngayBD, ngayKT;
-    float giaTri;
+    public Date ngayBD, ngayKT;
+    public float giaTri;
 
     public DTOKhuyenMai()
     {
@@ -66,6 +66,6 @@ public class DTOKhuyenMai {
     }
 
     public void setTen(String Ten) {
-        this.ten = ten;
+        this.ten = Ten;
     }
 }
