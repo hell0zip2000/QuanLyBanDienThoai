@@ -39,6 +39,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
             danhsachSP.add(sp.getMaSanPham());
         }
         capNhatComboSanPham();
+        //jTable1.setEnabled(false);
         
     }
     public void capNhatComboSanPham() {
@@ -184,9 +185,14 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
             },
             new String [] {
-                "STT", "Tên sản phẩm", "Giá ", "Hình", "Số lượng"
+                "STT", "Mã sản phẩm", "Tên sản phẩm", "Giá ", "Hình", "Số lượng"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jpSP.setBackground(new java.awt.Color(255, 255, 255));
@@ -401,6 +407,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
         GioHang_GUI gh = new GioHang_GUI();
                 gh.setLocationRelativeTo(null);
                 gh.setVisible(true);
+        
     }//GEN-LAST:event_btnDatHangActionPerformed
 
     private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
@@ -424,7 +431,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
     private void btnThemSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemSPActionPerformed
         // TODO add your handling code here:
-        DTOSanPham sp = new DTOSanPham();
+    DTOSanPham sp = new DTOSanPham();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         String maSP = (String) jComboBox1.getSelectedItem();
         String tensp = txtTenSP.getText();
@@ -436,32 +443,29 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
 //         Duyệt qua từng hàng trong bảng
         for (int j = 0; j < rowCount; j++) {
-            String tensp1 = (String) model.getValueAt(j, 1); // Giả sử cột Masp ở cột 0
+            String masp = (String) model.getValueAt(j, 1); // Giả sử cột Masp ở cột 0
 
             // Nếu tìm thấy hàng có Masp giống nhau
-            if (tensp.equals(tensp1)) {
+            if (maSP.equals(masp)) {
                 // Cộng thêm số lượng vào hàng đó
-                int soluongHienTai = (int) model.getValueAt(j, 4); // Giả sử cột số lượng ở cột 1
-                model.setValueAt(soluongHienTai + sl, j, 4); // Cập nhật lại số lượng
+                int soluongHienTai = (int) model.getValueAt(j, 5); // Giả sử cột số lượng ở cột 1
+                model.setValueAt(soluongHienTai + sl, j, 5); // Cập nhật lại số lượng
                 found = true;
                 break;
             }
         }
-
         // Nếu không tìm thấy hàng có Masp giống nhau, thêm một hàng mới
         if (!found) {
-            model.addRow(new Object[] { i++, tensp, gia,0, sl});
+            model.addRow(new Object[] { i++, maSP, tensp, gia,0, sl});
         }
         jTable1.setModel(model);
-
     }//GEN-LAST:event_btnThemSPActionPerformed
 
     private void btnXoaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaSPActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = jTable1.getSelectedRow();
+     int selectedRow = jTable1.getSelectedRow();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
-    String tensp = txtTenSP.getText();
+        String maSP = (String) jComboBox1.getSelectedItem();
+        String tensp = txtTenSP.getText();
         int sl = Integer.parseInt(txtSL.getText());
         int i = 1;
         int rowCount = model.getRowCount();
@@ -469,16 +473,17 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
 //         Duyệt qua từng hàng trong bảng
         for (int j = 0; j < rowCount; j++) {
-            String tensp1 = (String) model.getValueAt(j, 1); // Giả sử cột Masp ở cột 0
+            String masp = (String) model.getValueAt(j, 1); // Giả sử cột Masp ở cột 0
 
             // Nếu tìm thấy hàng có Masp giống nhau
-            if (tensp.equals(tensp1)) {
+            if (maSP.equals(masp)) {
                 // Cộng thêm số lượng vào hàng đó
-                int soluongHienTai = (int) model.getValueAt(j, 4); // Giả sử cột số lượng ở cột 1
-                model.setValueAt(soluongHienTai - 1, j, 4); // Cập nhật lại số lượng
+                int soluongHienTai = (int) model.getValueAt(j, 5); // Giả sử cột số lượng ở cột 1
+                model.setValueAt(soluongHienTai - 1, j, 5); // Cập nhật lại số lượng
                 if(soluongHienTai == 1){
-                    jTable1.getModel();
-        model.removeRow(selectedRow);
+                //jTable1.getModel();
+                model.removeRow(selectedRow);
+                jTable1.setModel(model);
                 }
                 found = true;
                 break;
@@ -487,11 +492,28 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
         // Nếu không tìm thấy hàng có Masp giống nhau, thêm một hàng mới
         if (!found) {
-        jTable1.getModel();
         model.removeRow(selectedRow);
+        jTable1.setModel(model);
         }
         jTable1.setModel(model);
+                
     }//GEN-LAST:event_btnXoaSPActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        Object masp =  jTable1.getValueAt(selectedRow,1);
+        Object tensp = jTable1.getValueAt(selectedRow, 2); 
+        Object gia = jTable1.getValueAt(selectedRow, 3);
+        Object hinh = jTable1.getValueAt(selectedRow, 4);
+        Object soluong = jTable1.getValueAt(selectedRow, 5);// Lấy tên sản phẩm từ cột 0
+        jComboBox1.setSelectedItem(masp.toString());
+        txtTenSP.setText(tensp.toString());
+        txtGia.setText(gia.toString());
+        jLabel2.setText(hinh.toString());
+        txtSL.setText(soluong.toString());
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments

@@ -302,7 +302,7 @@ public class GioHang_GUI extends javax.swing.JFrame {
         isFrameClosed = false;
         System.out.println("Trạng thái isFrameClosed: " + isFrameClosed);
         SanPham_GUI sp = new SanPham_GUI();
-        sp.jButton2.setEnabled(isFrameClosed);
+        sp.btnThemSP.setEnabled(isFrameClosed);
     }//GEN-LAST:event_formWindowClosed
 
     /**
