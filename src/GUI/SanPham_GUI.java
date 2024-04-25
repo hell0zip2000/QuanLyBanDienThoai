@@ -108,7 +108,7 @@ String newMaHD;
         System.out.print(newMaHD);
     }
 }// Biến toàn cục để lưu mã hóa đơn mới
-public void getTongSL() {
+    public int getTongSL() {
         int total = 0;
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int rowCount = model.getRowCount();
@@ -116,7 +116,7 @@ public void getTongSL() {
             int sl  = (int) model.getValueAt(j, 5); // Giả sử cột Masp ở cột 0
             total += sl;
         }
-        System.out.print(total);
+        return total;
     }
 
 
