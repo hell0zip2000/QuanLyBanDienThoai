@@ -31,6 +31,8 @@ private ArrayList<String> danhsachSP;
 private ArrayList<DTOSanPham> listMaSP, result;
 BLLHoaDon bllHoaDon = new BLLHoaDon();
 String newMaHD; 
+public int tongSL;
+public double tongGia;
 
 
     /**
@@ -50,7 +52,6 @@ String newMaHD;
             danhsachSP.add(sp.getMaSanPham());
         }
         capNhatComboSanPham();
-        getTongSL();
         //jTable1.setEnabled(false);
         
     }
@@ -62,7 +63,6 @@ String newMaHD;
             jComboBox1.addItem(maSP);
         }
     }
-
     public static String tangMaHD(ArrayList<String> danhSachMaSP) {
         String maxMaSP = ""; 
         for (String maSP : danhSachMaSP) {
@@ -71,7 +71,7 @@ String newMaHD;
             }
         }
         if (maxMaSP == null || maxMaSP.isEmpty()) {
-            return "SP001"; // Giả sử mã đầu tiên là "SP001"
+            return "HD001"; // Giả sử mã đầu tiên là "SP001"
         }
         // Tăng mã 
         String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
@@ -108,18 +108,6 @@ String newMaHD;
         System.out.print(newMaHD);
     }
 }// Biến toàn cục để lưu mã hóa đơn mới
-    public int getTongSL() {
-        int total = 0;
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowCount = model.getRowCount();
-        for (int j = 0; j < rowCount; j++) {
-            int sl  = (int) model.getValueAt(j, 5); // Giả sử cột Masp ở cột 0
-            total += sl;
-        }
-        return total;
-    }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -481,9 +469,10 @@ String newMaHD;
     private void txtSLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSLActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSLActionPerformed
+    
 
     private void btnDatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatHangActionPerformed
-       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     ChiTietHoaDon cthd = new ChiTietHoaDon();
     String newMaSP = tangMaHD(laydsma());
     txtMaHD.setText(newMaSP);
@@ -492,6 +481,8 @@ String newMaHD;
         Object maSP = model.getValueAt(i, 1);
         Object gia = model.getValueAt(i, 3);
         Object soluong = model.getValueAt(i, 5);
+        tongSL += (int)soluong;
+        tongGia += (double)((float) gia * (int) soluong);
         cthd.setMaSP(maSP.toString());
         cthd.setMaHD(txtMaHD.getText()); // Sử dụng newMaHD để đặt mã hóa đơn
         cthd.setSoLuong(Integer.parseInt(soluong.toString()));
@@ -500,11 +491,19 @@ String newMaHD;
         BLLHoaDon hd = new BLLHoaDon();
         String result = hd.BLLthemct(cthd);
         if (result.equals("Thêm thành công!")) {
-            JOptionPane.showMessageDialog(null, result, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Đặt hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            DTOHoaDon newSL = new DTOHoaDon();
+            newSL.setMaHoaDon(txtMaHD.getText());
+            newSL.setThoiGianTao(new java.sql.Date(new java.util.Date().getTime()));
+            newSL.setTongSoLuong(tongSL);
+            newSL.setTongGia(tongGia);
+            newSL.setThanhTien(0.0);
+            hd.BLLsua(newSL, txtMaHD.getText());
         } else {
             JOptionPane.showMessageDialog(null, result, "Lỗi", JOptionPane.ERROR_MESSAGE);
 
-        }}
+        }
+    }
             GioHang_GUI gh = new GioHang_GUI();
             gh.setLocationRelativeTo(null);
             gh.setVisible(true);
