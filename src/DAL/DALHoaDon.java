@@ -241,7 +241,40 @@ public boolean xoaHD(DTOHoaDon hd){
                     cthd.setThanhTien(rs.getFloat("THANH_TIEN"));
                     cthdList.add(cthd);
                 }
+//                for(ChiTietHoaDon ct : cthdList){
+//                    System.out.println(ct.getGia());
+//                }
                 return cthdList;
+            }catch(SQLException ex){
+                System.out.println(ex);
+            }finally{
+                close();
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList<ChiTietHoaDon> timcthdtheomahd(String MaHD){
+        ArrayList<ChiTietHoaDon> listcthd = new ArrayList<ChiTietHoaDon>();
+        if(open()){
+            try{
+                    String sql = "SELECT * FROM CHI_TIET_HOA_DON WHERE MA_HOA_DON = ?";
+                    p = c.prepareStatement(sql);
+                    p.setString(1, MaHD);
+                    ResultSet rs = p.executeQuery();
+                    while(rs.next()){
+                        ChiTietHoaDon cthd = new ChiTietHoaDon();
+                        cthd.setMaHD(MaHD);
+                        cthd.setMaSP(rs.getString("MA_SAN_PHAM"));
+                        cthd.setSoLuong(rs.getInt("SO_LUONG"));
+                        cthd.setGia(rs.getFloat("GIA"));
+                        cthd.setThanhTien(rs.getFloat("THANH_TIEN"));
+                        listcthd.add(cthd);
+                    }
+                    for(ChiTietHoaDon ct : listcthd){
+                        System.out.println(ct.getGia());
+                    }
+                    return listcthd;
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{
@@ -274,32 +307,7 @@ public boolean xoaHD(DTOHoaDon hd){
         }
         return result;
     }
-    
-    public ArrayList<ChiTietHoaDon> timcthdtheomahd(String MaHD){
-        ArrayList<ChiTietHoaDon> listcthd = new ArrayList<ChiTietHoaDon>();
-        if(open()){
-            try{
-                    String sql = "SELECT * FROM CHI_TIET_HOA_DON WHERE MA_HOA_DON=?";
-                    p = c.prepareStatement(sql);
-                    p.setString(1, MaHD);
-                    ResultSet rs = p.executeQuery();
-                    while(rs.next()){
-                        String MaSP = rs.getString("MA_SAN_PHAM");
-                        int SoLuong = rs.getInt("SO_LUONG");
-                        float Gia = rs.getFloat("GIA");
-                        float ThanhTien = rs.getFloat("THANH_TIEN");
-                        ChiTietHoaDon cthd = new ChiTietHoaDon(MaHD,MaSP,SoLuong,Gia,ThanhTien);
-                        listcthd.add(cthd);
-                }
-            }catch(SQLException ex){
-                System.out.println(ex);
-            }finally{
-                close();
-            }
-        }
-        return listcthd;
-    }
-    
+   
     public boolean xoaCTHD(String mahd){
         boolean result = false;
         if(open()){

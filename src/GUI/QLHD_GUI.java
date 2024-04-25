@@ -10,10 +10,7 @@ import DTO.DTOKhuyenMai;
 import DAL.DALHoaDon;
 import DTO.ChiTietHoaDon;
 import DTO.DTOHoaDon;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
