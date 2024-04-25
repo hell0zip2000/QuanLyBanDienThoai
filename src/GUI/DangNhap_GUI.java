@@ -4,7 +4,6 @@
  */
 package GUI;
 
-import java.awt.BorderLayout;
 import javax.swing.JOptionPane;
 import DAL.DALTaiKhoan;
 import BLL.BLLTaiKhoan;

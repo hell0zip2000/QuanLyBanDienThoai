@@ -5,17 +5,24 @@
 package GUI;
 
 import BLL.BLLHoaDon;
+import BLL.BLLKhachHang;
 import BLL.BLLKhuyenMai;
 import DAL.DALHoaDon;
 import DAL.DALKhuyenMai;
 import DTO.DTOHoaDon;
+import DTO.DTOKhachHang;
 import DTO.DTOKhuyenMai;
+import DTO.DTOSanPham;
 import static GUI.SanPham_GUI.tangMaHD;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,7 +35,9 @@ public class GioHang_GUI extends javax.swing.JFrame {
     private ArrayList<DTOKhuyenMai> listKM;
     private ArrayList<DTOHoaDon> listHD, listMaHD;
     BLLHoaDon bllHoaDon = new BLLHoaDon();
+    BLLKhachHang BLLkh = new BLLKhachHang();
     String newMaHD; 
+    String manv;
         /**
      * Creates new form GioHang_GUI
      */
@@ -42,6 +51,9 @@ public class GioHang_GUI extends javax.swing.JFrame {
         listKM = new DALKhuyenMai().getallkmlist();
         listHD = new DALHoaDon().getallHDlist();
         danhSachMaKhuyenMai = new ArrayList<>();
+        ArrayList<String> danhSachMaNCC = dsmkh();
+        cbbMaKH.setModel(new DefaultComboBoxModel<>(danhSachMaNCC.toArray(new String[0])));
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         for (DTOKhuyenMai km : listKM) {
             danhSachMaKhuyenMai.add(km.getMaKhuyenMai());
         }
@@ -49,6 +61,29 @@ public class GioHang_GUI extends javax.swing.JFrame {
         maTuDong();
         display();
     }
+    
+    public GioHang_GUI(String manv){
+        initComponents();
+        txtGia.setEnabled(false);
+        txtMaHD.setEnabled(false);
+        txtTongSL.setEnabled(false);
+        txtGia.setEnabled(false);
+        txtThanhTien.setEnabled(false);
+        listKM = new DALKhuyenMai().getallkmlist();
+        listHD = new DALHoaDon().getallHDlist();
+        danhSachMaKhuyenMai = new ArrayList<>();
+        ArrayList<String> danhSachMaNCC = dsmkh();
+        cbbMaKH.setModel(new DefaultComboBoxModel<>(danhSachMaNCC.toArray(new String[0])));
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        this.manv = manv;
+        for (DTOKhuyenMai km : listKM) {
+            danhSachMaKhuyenMai.add(km.getMaKhuyenMai());
+        }
+        capNhatComboBoxMaKhuyenMai();
+        maTuDong();
+        display();
+    }
+    
     public void display(){
         String ma = txtMaHD.getText();
         listMaHD = new ArrayList<>();
@@ -60,6 +95,37 @@ public class GioHang_GUI extends javax.swing.JFrame {
             }
         }
     }
+    
+    public ArrayList<String> dsmkh(){
+        ArrayList<String> arr = new ArrayList<String>();
+        for(DTOKhachHang sp : BLLkh.BLLgetDL()){
+            if(arr.contains(sp.getMaKH())){
+                continue;
+            }
+            arr.add(sp.getMaKH());
+        }
+        sortArrayList(arr);
+        return arr;
+    }
+    
+    public static void sortArrayList(ArrayList<String> arrayList) {
+        Collections.sort(arrayList, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                // Kiểm tra xem chuỗi có đúng định dạng không
+                if (!s1.matches("NCC\\d{3}") || !s2.matches("NCC\\d{3}")) {
+                    // Trả về kết quả không ổn định nếu một trong hai chuỗi không tuân thủ đúng định dạng
+                    return 0;
+                }
+                
+                // Lấy chỉ số số từ chuỗi, chuyển đổi sang số và so sánh
+                int num1 = Integer.parseInt(s1.substring(3));
+                int num2 = Integer.parseInt(s2.substring(3));
+                return Integer.compare(num1, num2);
+            }
+        });
+    }
+    
     public void capNhatComboBoxMaKhuyenMai() {
         // Xóa tất cả các mục cũ trong JComboBox
         jComboBox1.removeAllItems();
@@ -113,7 +179,6 @@ public class GioHang_GUI extends javax.swing.JFrame {
         txtGia = new javax.swing.JTextField();
         btnXacNhan = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        txtMaKH = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtTenKH = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -127,6 +192,7 @@ public class GioHang_GUI extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        cbbMaKH = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -183,6 +249,8 @@ public class GioHang_GUI extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Tên khách hàng");
 
+        txtTenKH.setEditable(false);
+
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Tổng số lượng");
 
@@ -220,6 +288,13 @@ public class GioHang_GUI extends javax.swing.JFrame {
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/minus (1).png"))); // NOI18N
 
+        cbbMaKH.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbMaKH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbMaKHActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpThanhToanLayout = new javax.swing.GroupLayout(jpThanhToan);
         jpThanhToan.setLayout(jpThanhToanLayout);
         jpThanhToanLayout.setHorizontalGroup(
@@ -253,11 +328,11 @@ public class GioHang_GUI extends javax.swing.JFrame {
                         .addGroup(jpThanhToanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtGia)
                             .addComponent(txtTongSL)
-                            .addComponent(txtMaKH, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                             .addComponent(txtTenKH)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, 377, Short.MAX_VALUE)
                             .addComponent(txtThanhTien)
-                            .addComponent(txtMaHD))))
+                            .addComponent(txtMaHD)
+                            .addComponent(cbbMaKH, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jpThanhToanLayout.createSequentialGroup()
                 .addGap(89, 89, 89)
@@ -290,11 +365,11 @@ public class GioHang_GUI extends javax.swing.JFrame {
                 .addGroup(jpThanhToanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(35, 35, 35)
                 .addGroup(jpThanhToanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(cbbMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addGroup(jpThanhToanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -336,7 +411,7 @@ public class GioHang_GUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, 927, Short.MAX_VALUE)
+            .addComponent(jpThanhToan, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
         );
 
         pack();
@@ -354,8 +429,8 @@ public class GioHang_GUI extends javax.swing.JFrame {
         hd.setThoiGianTao(new java.sql.Date(new java.util.Date().getTime()));
         hd.setTongSoLuong(Integer.parseInt(txtTongSL.getText())); // Tổng số lượng mặc định là 0
         hd.setTongGia(Double.parseDouble(txtGia.getText())); // Tổng giá mặc định là 0
-        hd.setMaKhachHang(txtMaKH.getText());
-        hd.setMaNhanVien("NV001");
+        hd.setMaKhachHang(cbbMaKH.getSelectedItem().toString());
+        hd.setMaNhanVien(manv);
         String maKhuyenMai = jComboBox1.getSelectedItem().toString();
         if (maKhuyenMai.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn mã khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -418,6 +493,11 @@ public class GioHang_GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
+    private void cbbMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbMaKHActionPerformed
+        // TODO add your handling code here:
+        txtTenKH.setText(BLLkh.BLLtim(cbbMaKH.getSelectedItem().toString()).getTen());
+    }//GEN-LAST:event_cbbMaKHActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -457,6 +537,7 @@ public class GioHang_GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnXacNhan;
+    private javax.swing.JComboBox<String> cbbMaKH;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -475,7 +556,6 @@ public class GioHang_GUI extends javax.swing.JFrame {
     public javax.swing.JPanel jpThanhToan;
     private javax.swing.JTextField txtGia;
     private javax.swing.JTextField txtMaHD;
-    private javax.swing.JTextField txtMaKH;
     private javax.swing.JTextField txtTenKH;
     private javax.swing.JTextField txtThanhTien;
     private javax.swing.JTextField txtTongSL;

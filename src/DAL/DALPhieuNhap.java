@@ -3,7 +3,6 @@ package DAL;
 import DTO.ChiTietPhieuNhap;
 import DTO.DTOPhieuNhap;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -121,6 +120,28 @@ public class DALPhieuNhap {
         return null;
     }
     
+    public DTOPhieuNhap timtheomanv(String Ma){
+        try{
+            if(open()){
+                String sql = "SELECT * FROM PHIEU_NHAP WHERE MA_NHAN_VIEN = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, Ma);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    Date ngaynhap = rs.getDate("NGAY_NHAP");
+                    String MaPN = rs.getString("MA_PHIEU_NHAP");
+                    DTOPhieuNhap pn = new DTOPhieuNhap(MaPN,ngaynhap,Ma);
+                    return pn;
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return null;
+    }
+    
     public boolean themPN(DTOPhieuNhap pn){
         boolean result = false;
         if(open()){
@@ -218,7 +239,7 @@ public class DALPhieuNhap {
                     cthd.setMaPN(rs.getString("MA_PHIEU_NHAP"));
                     cthd.setMaSP(rs.getString("MA_SAN_PHAM"));
                     cthd.setSoLuong(rs.getInt("SO_LUONG"));
-                    cthd.setDonGia(rs.getFloat("DON_GIA"));
+                    cthd.setDonGia(rs.getFloat("GIA"));
                     cthd.setTenSP(rs.getString("TEN_SAN_PHAM"));
                     ctpnList.add(cthd);
                 }
@@ -236,7 +257,7 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE CHI_TIET_PHIEU_NHAP SET MA_PHIEU_NHAP = ?, MA_SAN_PHAM = ?, SO_LUONG = ?, DON_GIA = ?, TEN_SAN_PHAM = ? WHERE MA_PHIEU_NHAP = ? ";
+                String SQL = "UPDATE CHI_TIET_PHIEU_NHAP SET MA_PHIEU_NHAP = ?, MA_SAN_PHAM = ?, SO_LUONG = ?, GIA = ?, TEN_SAN_PHAM = ? WHERE MA_PHIEU_NHAP = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, ctpn.getMaPN());
                 p.setString(2, ctpn.getMaSP());
@@ -256,21 +277,23 @@ public class DALPhieuNhap {
         return result;
     }
     
-    public ChiTietPhieuNhap timctpntheomapn(String MaPN){
+    public ArrayList<ChiTietPhieuNhap> timctpntheomapn(String MaPN){
         if(open()){
             try{
+                    ctpnList.clear();
                     String sql = "SELECT * FROM CHI_TIET_PHIEU_NHAP WHERE MA_PHIEU_NHAP = ?";
                     p = c.prepareStatement(sql);
                     p.setString(1, MaPN);
                     ResultSet rs = p.executeQuery();
-                    if(rs.next()){
+                    while(rs.next()){
                         String MaSP = rs.getString("MA_SAN_PHAM");
                         int SoLuong = rs.getInt("SO_LUONG");
-                        float DonGia = rs.getFloat("DON_GIA");
+                        float DonGia = rs.getFloat("GIA");
                         String TenSP = rs.getString("TEN_SAN_PHAM");
                         ChiTietPhieuNhap cthd = new ChiTietPhieuNhap(MaPN,MaSP,SoLuong,DonGia,TenSP);
-                        return cthd;
-                }
+                        ctpnList.add(cthd);
+                    }
+                    return ctpnList;
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{

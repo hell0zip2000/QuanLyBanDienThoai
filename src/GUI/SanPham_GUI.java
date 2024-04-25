@@ -33,6 +33,7 @@ BLLHoaDon bllHoaDon = new BLLHoaDon();
 String newMaHD; 
 public int tongSL;
 public double tongGia;
+public String manv;
 
 
     /**
@@ -52,9 +53,27 @@ public double tongGia;
             danhsachSP.add(sp.getMaSanPham());
         }
         capNhatComboSanPham();
-        //jTable1.setEnabled(false);
-        
+        //jTable1.setEnabled(false);  
     }
+    
+    public SanPham_GUI(String manv){
+        initComponents();
+        maTuDong();
+        btnThemSP.setEnabled(true);
+        txtTenSP.setEnabled(false);
+        txtGia.setEnabled(false);
+        listSP = new DALSanPham().getallSPlist();
+        listMaSP = new BLLSanPham().BLLgetDL();
+        danhsachSP = new ArrayList<>();
+        result = new ArrayList<>();
+        this.manv = manv;
+        for (DTOSanPham sp : listSP) {
+            danhsachSP.add(sp.getMaSanPham());
+        }
+        capNhatComboSanPham();
+        //jTable1.setEnabled(false);  
+    }
+    
     public void capNhatComboSanPham() {
         // Xóa tất cả các mục cũ trong JComboBox
         jComboBox1.removeAllItems();
@@ -143,7 +162,7 @@ public double tongGia;
         jLabel9 = new javax.swing.JLabel();
         lbHinh = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
+        jlbAnh = new javax.swing.JLabel();
         txtMaHD = new javax.swing.JTextField();
         btnXoaSP = new javax.swing.JButton();
         btnThemSP = new javax.swing.JButton();
@@ -271,14 +290,11 @@ public double tongGia;
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Số lượng");
 
-        txtSL.setText("jTextField2");
         txtSL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSLActionPerformed(evt);
             }
         });
-
-        txtGia.setText("jTextField3");
 
         btnDatHang.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDatHang.setForeground(new java.awt.Color(0, 102, 102));
@@ -297,8 +313,6 @@ public double tongGia;
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setText("Tên sản phẩm");
-
-        txtTenSP.setText("jTextField1");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Hình ảnh");
@@ -325,9 +339,6 @@ public double tongGia;
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(150, 150, 150))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnDatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jpSPLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -344,19 +355,22 @@ public double tongGia;
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jpSPLayout.createSequentialGroup()
                         .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGia)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlbAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
+                        .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jpSPLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnDatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtGia, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpSPLayout.createSequentialGroup()
                                 .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtTenSP, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lbHinh))
                                 .addGap(0, 32, Short.MAX_VALUE))
-                            .addComponent(txtSL))
-                        .addGap(16, 16, 16))
-                    .addGroup(jpSPLayout.createSequentialGroup()
-                        .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(txtSL, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(16, 16, 16))))
         );
         jpSPLayout.setVerticalGroup(
             jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,7 +393,7 @@ public double tongGia;
                             .addComponent(lbHinh)
                             .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel9)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jlbAnh, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(40, 40, 40)
                         .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -659,7 +673,6 @@ public double tongGia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -673,6 +686,7 @@ public double tongGia;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jlbAnh;
     private javax.swing.JPanel jpHeader;
     public javax.swing.JPanel jpSP;
     private javax.swing.JPanel jpTop;

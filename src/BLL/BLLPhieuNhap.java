@@ -53,6 +53,13 @@ public class BLLPhieuNhap {
         return null;
     }
     
+    public DTOPhieuNhap BLLtimtheomanv(String mc){
+        if(DALPN.hasPN(mc)){
+            return DALPN.timtheomanv(mc);
+        }
+        return null;
+    }
+    
     public String BLLthemct(ChiTietPhieuNhap ctpn){
         if(!DALPN.hasPN(ctpn.getMaPN())){
         } else {
@@ -74,7 +81,7 @@ public class BLLPhieuNhap {
         return "Sửa thất bại!";
     }
     
-    public ChiTietPhieuNhap BLLtimctpn(String mc){
+    public ArrayList<ChiTietPhieuNhap> BLLtimctpn(String mc){
         if(DALPN.hasPN(mc)){
             return DALPN.timctpntheomapn(mc);
         }
