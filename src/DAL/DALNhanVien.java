@@ -109,12 +109,12 @@ public class DALNhanVien{
     }
     return result;
     }
-    public boolean xoaNV(DTONhanVien nv){
+    public boolean xoaNV(String nv){
         boolean result = false;
         if(openConnection()){
             try{
                 PreparedStatement stmt  = c.prepareStatement("delete from NHAN_VIEN where MA_NHAN_VIEN = (?)");
-                stmt.setString(1, nv.getMaNV());
+                stmt.setString(1, nv);
                 if(stmt.executeUpdate() >= 1){
                     result = true;
                 }

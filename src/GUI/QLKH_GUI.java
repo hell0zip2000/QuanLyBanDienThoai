@@ -547,7 +547,7 @@ public class QLKH_GUI extends javax.swing.JFrame {
                     txtSDT.getText().equals("")){
                     JOptionPane.showMessageDialog(this, "Không được để trống thông tin khách hàng!");
                 }
-                else if(rbtNam.isSelected() == true && rbtNu.isSelected() == true){
+                else if(rbtNam.isSelected() == false && rbtNu.isSelected() == false){
                     JOptionPane.showMessageDialog(null,"Vui lòng chọn giới tính!");
                 }
                 else{

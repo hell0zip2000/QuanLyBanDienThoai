@@ -29,7 +29,7 @@ public class BLLNhanVien {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTONhanVien nv){
+    public String BLLxoa(String nv){
         if(DALNV.xoaNV(nv)){
             return "Xóa thành công!";
         }

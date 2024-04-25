@@ -4,6 +4,22 @@
  */
 package GUI;
 
+import BLL.BLLPhieuNhap;
+import DTO.ChiTietPhieuNhap;
+import DTO.ChiTietPhieuNhap;
+import java.awt.Image;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon; 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADMIN
@@ -39,8 +55,8 @@ public class QLPN_GUI extends javax.swing.JFrame {
         txtMaNV = new javax.swing.JTextField();
         txtMaNCC = new javax.swing.JTextField();
         txtTongGia = new javax.swing.JTextField();
-        btnThem = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnChiTiet = new javax.swing.JButton();
         jDateNgayNhap = new com.toedter.calendar.JDateChooser();
@@ -112,13 +128,13 @@ public class QLPN_GUI extends javax.swing.JFrame {
             }
         });
 
-        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnThem.setForeground(new java.awt.Color(0, 102, 102));
-        btnThem.setText("THÊM");
-
         btnSua.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSua.setForeground(new java.awt.Color(0, 102, 102));
         btnSua.setText("SỬA");
+
+        btnThem.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(0, 102, 102));
+        btnThem.setText("THÊM");
 
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(0, 102, 102));
