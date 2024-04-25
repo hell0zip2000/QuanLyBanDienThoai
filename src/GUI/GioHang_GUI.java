@@ -4,8 +4,14 @@
  */
 package GUI;
 
+import BLL.BLLHoaDon;
 import BLL.BLLKhuyenMai;
+import DAL.DALKhuyenMai;
+import DTO.DTOHoaDon;
+import DTO.DTOKhuyenMai;
+import static GUI.SanPham_GUI.tangMaHD;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +22,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GioHang_GUI extends javax.swing.JFrame {
     public boolean isFrameClosed = true;
-    /**
+    private ArrayList<String> danhSachMaKhuyenMai;
+    private ArrayList<DTOKhuyenMai> listKM;
+    BLLHoaDon bllHoaDon = new BLLHoaDon();
+    String newMaHD; 
+        /**
      * Creates new form GioHang_GUI
      */
     public GioHang_GUI() {
@@ -26,9 +36,49 @@ public class GioHang_GUI extends javax.swing.JFrame {
         txtTongSL.setEnabled(false);
         txtGia.setEnabled(false);
         txtThanhTien.setEnabled(false);
-        
+         listKM = new DALKhuyenMai().getallkmlist();
+        danhSachMaKhuyenMai = new ArrayList<>();
+        for (DTOKhuyenMai km : listKM) {
+            danhSachMaKhuyenMai.add(km.getMaKhuyenMai());
+        }
+        capNhatComboBoxMaKhuyenMai();
+        maTuDong();
     }
-
+    public void capNhatComboBoxMaKhuyenMai() {
+        // Xóa tất cả các mục cũ trong JComboBox
+        jComboBox1.removeAllItems();
+        // Thêm tất cả các mã khuyến mãi vào JComboBox
+        for (String maKhuyenMai : danhSachMaKhuyenMai) {
+            jComboBox1.addItem(maKhuyenMai);
+        }
+    }
+        public static String tangMaHD(ArrayList<String> danhSachMaSP) {
+        String maxMaSP = ""; 
+        for (String maSP : danhSachMaSP) {
+            if (maSP.compareTo(maxMaSP) > 0) {
+                maxMaSP = maSP;
+            }
+        }
+        if (maxMaSP == null || maxMaSP.isEmpty()) {
+            return "SP001"; // Giả sử mã đầu tiên là "SP001"
+        }
+        // Tăng mã 
+        String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSP.substring(4));
+        // Trả về mã mới
+        return prefix + String.format("%d", suffix);
+    }
+    public ArrayList<String> laydsma(){
+        ArrayList<String> dsma = new ArrayList<String>();
+        for(DTOHoaDon sp : bllHoaDon.BLLgetDL()){
+            dsma.add(sp.getMaHoaDon());
+        }
+        return dsma;
+    }
+     public void maTuDong() {
+    String newMaSP = tangMaHD(laydsma());
+    txtMaHD.setText(newMaSP);
+     }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -304,7 +354,13 @@ public class GioHang_GUI extends javax.swing.JFrame {
         SanPham_GUI sp = new SanPham_GUI();
         sp.btnThemSP.setEnabled(isFrameClosed);
     }//GEN-LAST:event_formWindowClosed
+    public void display(){
+        SanPham_GUI sp = new SanPham_GUI();
 
+        int tongsl = sp.getTongSL();
+        txtTongSL.setText(String.valueOf(tongsl));
+        
+    }
     /**
      * @param args the command line arguments
      */

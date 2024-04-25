@@ -4,15 +4,21 @@
  */
 package GUI;
 
+import BLL.BLLHoaDon;
 import BLL.BLLSanPham;
+import DAL.DALKhuyenMai;
 import DAL.DALSanPham;
+import DTO.ChiTietHoaDon;
+import DTO.DTOHoaDon;
 import DTO.DTOKhuyenMai;
 import DTO.DTOSanPham;
+import static GUI.QLHD_GUI.tangMaHD;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,11 +29,16 @@ public class SanPham_GUI extends javax.swing.JFrame {
 private ArrayList<DTOSanPham> listSP;
 private ArrayList<String> danhsachSP;
 private ArrayList<DTOSanPham> listMaSP, result;
+BLLHoaDon bllHoaDon = new BLLHoaDon();
+String newMaHD; 
+
+
     /**
      * Creates new form Home_GUI
      */
     public SanPham_GUI() {
         initComponents();
+        maTuDong();
         btnThemSP.setEnabled(true);
         txtTenSP.setEnabled(false);
         txtGia.setEnabled(false);
@@ -39,6 +50,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
             danhsachSP.add(sp.getMaSanPham());
         }
         capNhatComboSanPham();
+        getTongSL();
         //jTable1.setEnabled(false);
         
     }
@@ -50,6 +62,65 @@ private ArrayList<DTOSanPham> listMaSP, result;
             jComboBox1.addItem(maSP);
         }
     }
+
+    public static String tangMaHD(ArrayList<String> danhSachMaSP) {
+        String maxMaSP = ""; 
+        for (String maSP : danhSachMaSP) {
+            if (maSP.compareTo(maxMaSP) > 0) {
+                maxMaSP = maSP;
+            }
+        }
+        if (maxMaSP == null || maxMaSP.isEmpty()) {
+            return "SP001"; // Giả sử mã đầu tiên là "SP001"
+        }
+        // Tăng mã 
+        String prefix = maxMaSP.substring(0, 4); // Giả sử mã có dạng "TGxxx"
+        int suffix = Integer.parseInt(maxMaSP.substring(4));
+        suffix++;
+        // Trả về mã mới
+        return prefix + String.format("%d", suffix);
+    }
+    public ArrayList<String> laydsma(){
+        ArrayList<String> dsma = new ArrayList<String>();
+        for(DTOHoaDon sp : bllHoaDon.BLLgetDL()){
+            dsma.add(sp.getMaHoaDon());
+        }
+        return dsma;
+    }
+ public void maTuDong() {
+    String newMaSP = tangMaHD(laydsma());
+    txtMaHD.setText(newMaSP);
+    BLLHoaDon newHD = new BLLHoaDon();
+    DTOHoaDon hd = new DTOHoaDon();
+    // Đặt các giá trị cho hóa đơn
+    hd.setMaHoaDon(txtMaHD.getText());
+    hd.setThoiGianTao(new java.sql.Date(new java.util.Date().getTime())); // Chuyển đổi java.util.Date sang java.sql.Date
+    hd.setTongSoLuong(0); // Tổng số lượng mặc định là 0
+    hd.setTongGia(0.0); // Tổng giá mặc định là 0
+    hd.setThanhTien(0.0); // Thanh toán mặc định là 0
+    hd.setMaKhachHang(null); // Mã khách hàng mặc định là null
+    hd.setMaNhanVien(null); // Mã nhân viên mặc định là null
+    hd.setMaKhuyenMai(null); // Mã khuyến mãi mặc định là null
+    
+    // Thêm hóa đơn mới vào cơ sở dữ liệu
+    String result = newHD.BLLthem(hd);
+    if (result.equals("Thêm thành công!")) {
+        System.out.print(newMaHD);
+    }
+}// Biến toàn cục để lưu mã hóa đơn mới
+public void getTongSL() {
+        int total = 0;
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rowCount = model.getRowCount();
+        for (int j = 0; j < rowCount; j++) {
+            int sl  = (int) model.getValueAt(j, 5); // Giả sử cột Masp ở cột 0
+            total += sl;
+        }
+        System.out.print(total);
+    }
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,6 +156,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
         lbHinh = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
+        txtMaHD = new javax.swing.JTextField();
         btnXoaSP = new javax.swing.JButton();
         btnThemSP = new javax.swing.JButton();
 
@@ -255,10 +327,19 @@ private ArrayList<DTOSanPham> listMaSP, result;
             }
         });
 
+        txtMaHD.setText("jTextField1");
+
         javax.swing.GroupLayout jpSPLayout = new javax.swing.GroupLayout(jpSP);
         jpSP.setLayout(jpSPLayout);
         jpSPLayout.setHorizontalGroup(
             jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(150, 150, 150))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnDatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jpSPLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -270,6 +351,9 @@ private ArrayList<DTOSanPham> listMaSP, result;
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(52, 52, 52)
                 .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpSPLayout.createSequentialGroup()
+                        .addComponent(txtMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jpSPLayout.createSequentialGroup()
                         .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtGia)
@@ -285,19 +369,14 @@ private ArrayList<DTOSanPham> listMaSP, result;
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(150, 150, 150))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnDatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jpSPLayout.setVerticalGroup(
             jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpSPLayout.createSequentialGroup()
                 .addComponent(jLabel4)
-                .addGap(42, 42, 42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtMaHD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSPLayout.createSequentialGroup()
                         .addGroup(jpSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -389,7 +468,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
@@ -404,10 +483,31 @@ private ArrayList<DTOSanPham> listMaSP, result;
     }//GEN-LAST:event_txtSLActionPerformed
 
     private void btnDatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatHangActionPerformed
-        GioHang_GUI gh = new GioHang_GUI();
-                gh.setLocationRelativeTo(null);
-                gh.setVisible(true);
-        
+       DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    ChiTietHoaDon cthd = new ChiTietHoaDon();
+    String newMaSP = tangMaHD(laydsma());
+    txtMaHD.setText(newMaSP);
+    int rowCount = model.getRowCount();
+    for (int i = 0; i < rowCount; i++) {
+        Object maSP = model.getValueAt(i, 1);
+        Object gia = model.getValueAt(i, 3);
+        Object soluong = model.getValueAt(i, 5);
+        cthd.setMaSP(maSP.toString());
+        cthd.setMaHD(txtMaHD.getText()); // Sử dụng newMaHD để đặt mã hóa đơn
+        cthd.setSoLuong(Integer.parseInt(soluong.toString()));
+        cthd.setGia(Float.parseFloat(gia.toString()));
+        cthd.setThanhTien(cthd.ThanhTien);
+        BLLHoaDon hd = new BLLHoaDon();
+        String result = hd.BLLthemct(cthd);
+        if (result.equals("Thêm thành công!")) {
+            JOptionPane.showMessageDialog(null, result, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, result, "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+        }}
+            GioHang_GUI gh = new GioHang_GUI();
+            gh.setLocationRelativeTo(null);
+            gh.setVisible(true);
     }//GEN-LAST:event_btnDatHangActionPerformed
 
     private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
@@ -579,6 +679,7 @@ private ArrayList<DTOSanPham> listMaSP, result;
     private javax.swing.JPanel jpTop;
     private javax.swing.JLabel lbHinh;
     private javax.swing.JTextField txtGia;
+    private javax.swing.JTextField txtMaHD;
     private javax.swing.JTextField txtSL;
     private javax.swing.JTextField txtTenSP;
     // End of variables declaration//GEN-END:variables
