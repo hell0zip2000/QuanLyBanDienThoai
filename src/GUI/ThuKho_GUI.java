@@ -485,60 +485,60 @@ public class ThuKho_GUI extends javax.swing.JFrame {
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
         // TODO add your handling code here:
-        if(txtTim.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn tìm kiếm");
-        }else if(cbbTim.getSelectedItem() == null){
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn kiểu tìm kiếm");
-        }else{
-            String selectedValue = cbbTim.getSelectedItem().toString();
-            switch (selectedValue) {
-                case "Mã sản phẩm":
-                String maSPCanTim = txtTim.getText();
-                DTOSanPham ketQuaMaSP = BLLsp.BLLtimtheomasp(maSPCanTim);
-                if (ketQuaMaSP != null){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    Object[] row = {ketQuaMaSP.getMaSanPham(),ketQuaMaSP.getTenSanPham(),ketQuaMaSP.getGiaBan(),ketQuaMaSP.getGiaNhap(),ketQuaMaSP.getSoLuong(),ketQuaMaSP.getMaNCC(),ketQuaMaSP.getBaoHanh(),ketQuaMaSP.getImg()};
-                    model.addRow(row);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã sản phẩm");
-                }
-                break;
-                case "Tên sản phẩm":
-                String tenSachCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-                if (ketQuaTenSach.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTenSach){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
-                }
-                break;
-                case "Mã nhà cung cấp":
-                String theLoaiCanTim = txtTim.getText();
-                ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-                if (ketQuaTL.size() > 0){
-                    model = (DefaultTableModel) tbSanPham.getModel();
-                    model.setRowCount(0);
-                    for(DTOSanPham s : ketQuaTL){
-                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getImg()};
-                        model.addRow(row);
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã nhà cung cấp");
-                }
-                break;
-                default:
-                throw new AssertionError();
-            }
-        }
+//        if(txtTim.getText().isEmpty()){
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu muốn tìm kiếm");
+//        }else if(cbbTim.getSelectedItem() == null){
+//            JOptionPane.showMessageDialog(this, "Vui lòng chọn kiểu tìm kiếm");
+//        }else{
+//            String selectedValue = cbbTim.getSelectedItem().toString();
+//            switch (selectedValue) {
+//                case "Mã sản phẩm":
+//                String maSPCanTim = txtTim.getText();
+//                DTOSanPham ketQuaMaSP = BLLsp.BLLtimtheomasp(maSPCanTim);
+//                if (ketQuaMaSP != null){
+//                    model = (DefaultTableModel) tbSanPham.getModel();
+//                    model.setRowCount(0);
+//                    Object[] row = {ketQuaMaSP.getMaSanPham(),ketQuaMaSP.getTenSanPham(),ketQuaMaSP.getGiaBan(),ketQuaMaSP.getGiaNhap(),ketQuaMaSP.getSoLuong(),ketQuaMaSP.getMaNCC(),ketQuaMaSP.getBaoHanh(),ketQuaMaSP.getImg()};
+//                    model.addRow(row);
+//                }
+//                else{
+//                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã sản phẩm");
+//                }
+//                break;
+//                case "Tên sản phẩm":
+//                String tenSachCanTim = txtTim.getText();
+//                ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
+//                if (ketQuaTenSach.size() > 0){
+//                    model = (DefaultTableModel) tbSanPham.getModel();
+//                    model.setRowCount(0);
+//                    for(DTOSanPham s : ketQuaTenSach){
+//                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
+//                        model.addRow(row);
+//                    }
+//                }
+//                else{
+//                    JOptionPane.showMessageDialog(this, "Không tìm thấy tên sản phẩm");
+//                }
+//                break;
+//                case "Mã nhà cung cấp":
+//                String theLoaiCanTim = txtTim.getText();
+//                ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
+//                if (ketQuaTL.size() > 0){
+//                    model = (DefaultTableModel) tbSanPham.getModel();
+//                    model.setRowCount(0);
+//                    for(DTOSanPham s : ketQuaTL){
+//                        Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getImg()};
+//                        model.addRow(row);
+//                    }
+//                }
+//                else{
+//                    JOptionPane.showMessageDialog(this, "Không tìm thấy mã nhà cung cấp");
+//                }
+//                break;
+//                default:
+//                throw new AssertionError();
+//            }
+//        }
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void txtTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimActionPerformed
@@ -547,56 +547,56 @@ public class ThuKho_GUI extends javax.swing.JFrame {
 
     private void txtTimKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKeyReleased
         // TODO add your handling code here:
-        int selectedValue = cbbTim.getSelectedIndex();
-        switch (selectedValue) {
-            case 0:
-            String maSachCanTim = txtTim.getText();
-            DTOSanPham ketQuaMaSach = BLLsp.BLLtimtheomasp(maSachCanTim);
-            if (ketQuaMaSach != null){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                Object[] row = {ketQuaMaSach.getMaSanPham(),ketQuaMaSach.getTenSanPham(),ketQuaMaSach.getGiaBan(),ketQuaMaSach.getGiaNhap(),ketQuaMaSach.getSoLuong(),ketQuaMaSach.getMaNCC(),ketQuaMaSach.getBaoHanh(),ketQuaMaSach.getImg()};
-                model.addRow(row);
-            }else{
-                loadSP();
-            }
-            break;
-            case 1:
-            String tenSachCanTim = txtTim.getText().toString();
-            ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
-            for(DTOSanPham sp : ketQuaTenSach){
-                System.out.println(sp.getMaSanPham());
-            }
-            if (!ketQuaTenSach.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTenSach){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
-                }
-            }
-            else{
-                loadSP();
-            }
-            break;
-            case 2:
-            String theLoaiCanTim = txtTim.getText();
-            ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
-            if (!ketQuaTL.isEmpty()){
-                model = (DefaultTableModel) tbSanPham.getModel();
-                model.setRowCount(0);
-                for(DTOSanPham s : ketQuaTL){
-                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
-                    model.addRow(row);
-                }
-            }
-            else{
-                loadSP();
-            }
-            break;
-            default:
-            throw new AssertionError();
-        }
+//        int selectedValue = cbbTim.getSelectedIndex();
+//        switch (selectedValue) {
+//            case 0:
+//            String maSachCanTim = txtTim.getText();
+//            DTOSanPham ketQuaMaSach = BLLsp.BLLtimtheomasp(maSachCanTim);
+//            if (ketQuaMaSach != null){
+//                model = (DefaultTableModel) tbSanPham.getModel();
+//                model.setRowCount(0);
+//                Object[] row = {ketQuaMaSach.getMaSanPham(),ketQuaMaSach.getTenSanPham(),ketQuaMaSach.getGiaBan(),ketQuaMaSach.getGiaNhap(),ketQuaMaSach.getSoLuong(),ketQuaMaSach.getMaNCC(),ketQuaMaSach.getBaoHanh(),ketQuaMaSach.getImg()};
+//                model.addRow(row);
+//            }else{
+//                loadSP();
+//            }
+//            break;
+//            case 1:
+//            String tenSachCanTim = txtTim.getText().toString();
+//            ArrayList<DTOSanPham> ketQuaTenSach = BLLsp.BLLtimtheoten(tenSachCanTim);
+//            for(DTOSanPham sp : ketQuaTenSach){
+//                System.out.println(sp.getMaSanPham());
+//            }
+//            if (!ketQuaTenSach.isEmpty()){
+//                model = (DefaultTableModel) tbSanPham.getModel();
+//                model.setRowCount(0);
+//                for(DTOSanPham s : ketQuaTenSach){
+//                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
+//                    model.addRow(row);
+//                }
+//            }
+//            else{
+//                loadSP();
+//            }
+//            break;
+//            case 2:
+//            String theLoaiCanTim = txtTim.getText();
+//            ArrayList<DTOSanPham> ketQuaTL = BLLsp.BLLtimtheomancc(theLoaiCanTim);
+//            if (!ketQuaTL.isEmpty()){
+//                model = (DefaultTableModel) tbSanPham.getModel();
+//                model.setRowCount(0);
+//                for(DTOSanPham s : ketQuaTL){
+//                    Object[] row = {s.getMaSanPham(),s.getTenSanPham(),s.getGiaBan(),s.getGiaNhap(),s.getSoLuong(),s.getMaNCC(),s.getBaoHanh(),s.getImg()};
+//                    model.addRow(row);
+//                }
+//            }
+//            else{
+//                loadSP();
+//            }
+//            break;
+//            default:
+//            throw new AssertionError();
+//        }
     }//GEN-LAST:event_txtTimKeyReleased
 
     /**

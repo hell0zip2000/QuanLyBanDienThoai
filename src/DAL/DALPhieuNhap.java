@@ -38,8 +38,6 @@ public class DALPhieuNhap {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch(Exception ex){
             System.out.println(ex);
@@ -146,7 +144,7 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String sql = "INSERT INTO PHIEU_NHAP VALUES(?, ?, ?, ?)";
+                String sql = "INSERT INTO PHIEU_NHAP VALUES(?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1, pn.getMaPhieuNhap());
                 p.setDate(2, (Date) pn.getNgayNhap());
@@ -163,13 +161,13 @@ public class DALPhieuNhap {
         return result;
     }
     
-    public boolean xoaPN(DTOPhieuNhap pn){
+    public boolean xoaPN(String pn){
         boolean result = false;
         if(open()){
             try{
                 String sql = "DELETE FROM PHIEU_NHAP WHERE MA_PHIEU_NHAP = ?";
                 p = c.prepareStatement(sql);
-                p.setString(1, pn.getMaPhieuNhap());
+                p.setString(1, pn);
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }
@@ -208,7 +206,7 @@ public class DALPhieuNhap {
         boolean result = false;
         if(open()){
             try{
-                String sql = "INSERT INTO CHI_TIET_PHIEU_NHAP VALUE(?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO CHI_TIET_PHIEU_NHAP VALUES(?, ?, ?, ?, ?)";
                 p = c.prepareStatement(sql);
                 p.setString(1, pn.getMaPN());
                 p.setString(2, pn.getMaSP());
@@ -280,7 +278,7 @@ public class DALPhieuNhap {
     public ArrayList<ChiTietPhieuNhap> timctpntheomapn(String MaPN){
         if(open()){
             try{
-                    ctpnList.clear();
+                    ArrayList<ChiTietPhieuNhap> listctpn = new ArrayList<ChiTietPhieuNhap>();
                     String sql = "SELECT * FROM CHI_TIET_PHIEU_NHAP WHERE MA_PHIEU_NHAP = ?";
                     p = c.prepareStatement(sql);
                     p.setString(1, MaPN);
@@ -291,9 +289,9 @@ public class DALPhieuNhap {
                         float DonGia = rs.getFloat("GIA");
                         String TenSP = rs.getString("TEN_SAN_PHAM");
                         ChiTietPhieuNhap cthd = new ChiTietPhieuNhap(MaPN,MaSP,SoLuong,DonGia,TenSP);
-                        ctpnList.add(cthd);
+                        listctpn.add(cthd);
                     }
-                    return ctpnList;
+                    return listctpn;
             }catch(SQLException ex){
                 System.out.println(ex);
             }finally{

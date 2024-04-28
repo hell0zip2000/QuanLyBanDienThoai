@@ -271,9 +271,6 @@ public boolean xoaHD(DTOHoaDon hd){
                         cthd.setThanhTien(rs.getFloat("THANH_TIEN"));
                         listcthd.add(cthd);
                     }
-                    for(ChiTietHoaDon ct : listcthd){
-                        System.out.println(ct.getGia());
-                    }
                     return listcthd;
             }catch(SQLException ex){
                 System.out.println(ex);

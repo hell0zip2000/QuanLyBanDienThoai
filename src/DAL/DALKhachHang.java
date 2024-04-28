@@ -27,8 +27,6 @@ public class DALKhachHang {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch(Exception ex){
             System.out.println(ex);

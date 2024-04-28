@@ -31,9 +31,9 @@ public class BLLPhieuNhap {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTOPhieuNhap pn){
+    public String BLLxoa(String pn){
         if(DALPN.xoaPN(pn)){
-            DALPN.xoaCTPN(pn.getMaPhieuNhap());
+            DALPN.xoaCTPN(pn);
             return "Xóa thành công!";
         }
         return "Xóa thất bại!";
@@ -62,7 +62,6 @@ public class BLLPhieuNhap {
     
     public String BLLthemct(ChiTietPhieuNhap ctpn){
         if(!DALPN.hasPN(ctpn.getMaPN())){
-        } else {
             return "Mã phiếu nhập không tồn tài!";
         }
         if(DALPN.themctpn(ctpn)){
@@ -86,5 +85,12 @@ public class BLLPhieuNhap {
             return DALPN.timctpntheomapn(mc);
         }
         return null;
+    }
+    
+    public String BLLxoaCT(String pn){
+        if(DALPN.xoaCTPN(pn)){
+            return "Xóa thành công!";
+        }
+        return "Xóa thất bại!";
     }
 }

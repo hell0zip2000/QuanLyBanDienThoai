@@ -158,13 +158,13 @@ public class DangNhap_GUI extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Nhân viên!");
                         // Ẩn panel Menu cho Nhân viên
                         dispose();
-                        SanPham_GUI nv = new SanPham_GUI();
+                        SanPham_GUI nv = new SanPham_GUI(username);
                         nv.setVisible(true);
                     } else if (maquyen == "kho") {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thành công! Xin chào Thủ kho!");
                         // Ẩn panel Menu cho Nhân viên
                         dispose();
-                        ThuKho_GUI kho = new ThuKho_GUI();
+                        QLPN_GUI kho = new QLPN_GUI(username);
                         kho.setVisible(true);
                 }else{
                     JOptionPane.showMessageDialog(null, "Tài khoản hoặc mật khẩu không chính xác vui lòng thử lại. Vui lòng thử lại!");
