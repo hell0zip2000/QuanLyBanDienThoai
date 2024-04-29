@@ -28,8 +28,6 @@ public class DALSanPhamBaoHanh {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch(Exception ex){
             System.out.println(ex);
@@ -75,7 +73,7 @@ public class DALSanPhamBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String sql = "SELECT * FROM SAN_PHAM_BAO_HANH WHERE MA_SAN_PHAM = ?";
+                String sql = "SELECT * FROM SAN_PHAM_BAO_HANH WHERE MA_BAO_HANH = ?";
                 p = c.prepareStatement(sql);
                 p.setString(1, MaSPBH);
                 ResultSet rs = p.executeQuery();
@@ -112,6 +110,31 @@ public class DALSanPhamBaoHanh {
         return null;
     }
     
+    public ArrayList<DTOSanPhamBaoHanh> timtheombh(String MaSPBH){
+        try{
+            if(open()){
+                spbhList.clear();
+                String sql = "SELECT * FROM SAN_PHAM_BAO_HANH WHERE MA_BAO_HANH = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaSPBH);
+                ResultSet rs = p.executeQuery();
+                if(rs.next()){
+                    String TenSP = rs.getString("TEN_SAN_PHAM");
+                    float gia = rs.getFloat("GIA_BAN");
+                    String MaBH = rs.getString("MA_SAN_PHAM");
+                    DTOSanPhamBaoHanh spbh = new DTOSanPhamBaoHanh(MaSPBH,TenSP,gia,MaBH);
+                    spbhList.add(spbh);
+                    return spbhList;
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return null;
+    }
+    
     public boolean themSPBH(DTOSanPhamBaoHanh spbh){
         boolean result = false;
         if(open()){
@@ -138,7 +161,7 @@ public class DALSanPhamBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String sql = "DELETA FROM SAN_PHAM_BAO_HANH WHERE MA_SAN_PHAM = ?";
+                String sql = "DELETA FROM SAN_PHAM_BAO_HANH WHERE MA_BAO_HANH = ?";
                 p = c.prepareStatement(sql);
                 p.executeUpdate();
                 p.setString(1, MaSPBH);
@@ -158,13 +181,13 @@ public class DALSanPhamBaoHanh {
         boolean result = false;
         if(open()){
             try{
-                String SQL = "UPDATE SAN_PHAM_BAO_HANH SET  MA_SAN_PHAM = ?, TEN_SAN_PHAM = ?, GIA = ?, MA_BAO_HANH = ? WHERE MA_SAN_PHAM = ? ";
+                String SQL = "UPDATE SAN_PHAM_BAO_HANH SET  MA_SAN_PHAM = ?, TEN_SAN_PHAM = ?, GIA = ?, MA_BAO_HANH = ? WHERE MA_BAO_HANH = ? ";
                 p = c.prepareStatement(SQL);
                 p.setString(1, spbh.getMaSPBH());
                 p.setString(2, spbh.getTenSP());
                 p.setFloat(3, spbh.getGia());
                 p.setString(4, spbh.getMaBH());
-                p.setString(6, spbh.getMaSPBH());
+                p.setString(6, spbh.getMaBH());
                 if(p.executeUpdate() >= 1){
                     result = true;
                 }

@@ -21,8 +21,8 @@ public class BLLPhieuBaoHanh {
         return "Thêm thất bại!";
     }
     
-    public String BLLxoa(DTOPhieuBaoHanh pbh){
-        if(DALPBH.xoaPBH(pbh.getMaBaoHanh())){
+    public String BLLxoa(String pbh){
+        if(DALPBH.xoaPBH(pbh)){
             return "Xóa thành công!";
         }
         return "Xóa thất bại!";
@@ -38,6 +38,13 @@ public class BLLPhieuBaoHanh {
     public DTOPhieuBaoHanh BLLtim(String pbh){
         if(DALPBH.hasPBH(pbh)){
             return DALPBH.timtheompbh(pbh);
+        }
+        return null;
+    }
+    
+    public ArrayList<DTOPhieuBaoHanh> BLLtimmhd(String pbh){
+        if(DALPBH.hasPBH(pbh)){
+            return DALPBH.timtheomhd(pbh);
         }
         return null;
     }

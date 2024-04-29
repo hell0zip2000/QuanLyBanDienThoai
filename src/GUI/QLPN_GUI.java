@@ -932,7 +932,7 @@ public class QLPN_GUI extends javax.swing.JFrame {
                 if(txtMaPN.getText().trim().equals("") ||
                     txtMaNV.getText().equals("") ||
                     jDateNgayNhap.getDate() == null){
-                    JOptionPane.showMessageDialog(this, "Không được để trống thông tin khách hàng!");
+                    JOptionPane.showMessageDialog(this, "Không được để trống thông tin!");
                 }
                 else{
                     sp.setMaPhieuNhap(txtMaPN.getText()); 

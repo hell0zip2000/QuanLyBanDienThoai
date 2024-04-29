@@ -28,8 +28,6 @@ public class DALPhieuBaoHanh {
             ds.setIntegratedSecurity(false);
             ds.setTrustServerCertificate(false);
             c = ds.getConnection();
-            System.out.println("Kết nối thành công");
-            System.out.println(c.getCatalog());
             return true;
         }catch(Exception ex){
             System.out.println(ex);
@@ -112,6 +110,31 @@ public class DALPhieuBaoHanh {
             close();
         }
         return null;
+    }
+    
+    public ArrayList<DTOPhieuBaoHanh> timtheomhd(String MaBaoHanh){
+        try{
+            if(open()){
+                pbhList.clear();
+                String sql = "SELECT * FROM PHIEU_BAO_HANH WHERE MA_HOA_DON = ?";
+                p = c.prepareStatement(sql);
+                p.setString(1, MaBaoHanh);
+                ResultSet rs = p.executeQuery();
+                while(rs.next()){
+                    Date ngayLap = rs.getDate("NGAY_LAP");
+                    String NoiDung = rs.getString("NOI_DUNG");
+                    float Gia = rs.getFloat("CHI_PHI");
+                    String HoaDon = rs.getString("MA_HOA_DON");
+                    DTOPhieuBaoHanh pbh = new DTOPhieuBaoHanh(MaBaoHanh,NoiDung,ngayLap,Gia,HoaDon);
+                    pbhList.add(pbh);
+                }
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }finally{
+            close();
+        }
+        return pbhList;
     }
     
     public boolean themPBH(DTOPhieuBaoHanh pbh){
